@@ -9,6 +9,11 @@
             "UnauthRoleName": "aws-email-20190315163601-unauthRole",
             "StackName": "aws-email-20190315163601",
             "StackId": "arn:aws:cloudformation:us-east-1:678103615909:stack/aws-email-20190315163601/f26b9f50-4761-11e9-8971-12d3b8b76b62"
+        },
+        "categories": {
+            "auth": {
+                "cognito59ae2d41": {}
+            }
         }
     }
 }
