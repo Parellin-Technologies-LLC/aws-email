@@ -21,6 +21,6 @@ const awsmobile = {
 };
 
 writeFileSync(
-	join( process.cwd(), 'src', 'aws-exports.jst' ),
+	join( process.cwd(), 'src', 'aws-exports.js' ),
 	`export default ${ JSON.stringify( awsmobile ) }`
 );
