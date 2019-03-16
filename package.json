@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"aws:generateAwsExport": "node build-tools/generateAwsExport.js",
+		"env": "node -e \"console.log( process.cwd() )\"",
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint"
