@@ -6,7 +6,7 @@ frontend:
                 - npm ci
         build:
             commands:
-                - npm run env
+                - npm run aws:generateAwsExport
                 - npm run build
     artifacts:
         baseDirectory: dist
