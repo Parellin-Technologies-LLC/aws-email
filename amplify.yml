@@ -6,7 +6,7 @@ frontend:
                 - npm ci
         build:
             commands:
-                - node -e "console.log( process.env )"
+                - npm run env
                 - npm run build
     artifacts:
         baseDirectory: dist
