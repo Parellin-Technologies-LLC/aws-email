@@ -4,11 +4,13 @@ module.exports = {
 		node: true
 	},
 	extends: [
-		'eslint:recommended',
-		'plugin:vue/recommended'
+		'eslint:recommended'
+		// 'plugin:vue/recommended'
 	],
 	parserOptions: {
-		parser: 'babel-eslint'
+		parser: 'babel-eslint',
+		ecmaVersion: 2017,
+		sourceType: 'module'
 	},
 	globals: {
 		before: true,

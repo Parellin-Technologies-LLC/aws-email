@@ -22,7 +22,7 @@ import { sync } from 'vuex-router-sync';
 
 // Application imports
 import App from './App';
-import i18n from '@/i18n';
+// import i18n from '@/i18n';
 import router from '@/router';
 import store from '@/store';
 
@@ -33,7 +33,7 @@ Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue( {
-	i18n,
+	// i18n,
 	router,
 	store,
 	render: h => h( App )
