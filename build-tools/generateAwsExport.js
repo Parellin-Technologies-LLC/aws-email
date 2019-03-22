@@ -3,7 +3,6 @@
  * Project: aws-email
  * @author Nick Soggin <iSkore@users.noreply.github.com> on 16-Mar-2019
  *******************************************************************************************************/
-'use strict';
 
 const
 	{ writeFileSync } = require( 'fs' ),

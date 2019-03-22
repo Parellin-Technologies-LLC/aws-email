@@ -1,17 +1,82 @@
 <template>
 	<v-app>
-		<core-filter/>
-		<core-toolbar/>
-		<core-drawer/>
-		<core-view/>
+		<div class='nav'>
+			<router-link tag="p" to="/">
+				<a>Home</a>
+			</router-link>
+			<router-link tag="p" to="/profile">
+				<a>Profile</a>
+			</router-link>
+			<router-link tag="p" to="/protected">
+				<a>Protected</a>
+			</router-link>
+			<router-link tag="p" to="/auth" v-if="!signedIn">
+				<a>Sign Up / Sign In</a>
+			</router-link>
+		</div>
+		<router-view></router-view>
+		<div class='sign-out' v-if="signedIn">
+			<amplify-sign-out></amplify-sign-out>
+		</div>
 	</v-app>
 </template>
+
+<script>
+	import { AmplifyEventBus } from 'aws-amplify-vue';
+	import { Auth } from 'aws-amplify';
+	
+	export default {
+		name: 'app',
+		data() {
+			return {
+				signedIn: false
+			};
+		},
+		beforeCreate() {
+			AmplifyEventBus.$on( 'authState', info => {
+				if( info === 'signedIn' ) {
+					this.signedIn = true;
+					this.$router.push( '/profile' );
+				}
+				if( info === 'signedOut' ) {
+					this.$router.push( '/auth' );
+					this.signedIn = false;
+				}
+			} );
+			
+			Auth.currentAuthenticatedUser()
+				.then( user => {
+					console.log( user );
+					this.signedIn = true;
+				} )
+				.catch( () => this.signedIn = false );
+		}
+	};
+</script>
 
 <style lang="scss">
 	@import '@/styles/index.scss';
 	
-	/* Remove in 1.2 */
-	.v-datatable thead th.column.sortable i {
-		vertical-align: unset;
+	.nav {
+		display: flex;
+	}
+	
+	.nav p {
+		padding: 0px 30px 0px 0px;
+		font-size: 18px;
+		color: #000;
+	}
+	
+	.nav p:hover {
+		opacity: .7;
+	}
+	
+	.nav p a {
+		text-decoration: none;
+	}
+	
+	.sign-out {
+		width: 160px;
+		margin: 0 auto;
 	}
 </style>

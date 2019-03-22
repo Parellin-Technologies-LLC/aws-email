@@ -1,3 +1,3 @@
+import './awsamplify';
 import './axios';
-import './chartist';
 import './vuetify';

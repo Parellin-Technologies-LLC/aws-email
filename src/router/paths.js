@@ -1,37 +1,24 @@
 export default [
 	{
-		path: '/dashboard',
-		view: 'Dashboard'
+		path: '/',
+		name: 'Home',
+		view: 'Home'
 	},
 	{
-		path: '/user-profile',
-		name: 'User Profile',
-		view: 'UserProfile'
+		path: '/auth',
+		name: 'Auth',
+		view: 'Auth'
 	},
 	{
-		path: '/table-list',
-		name: 'Table List',
-		view: 'TableList'
+		path: '/protected',
+		name: 'Protected',
+		view: 'Protected',
+		meta: { requiresAuth: true }
 	},
 	{
-		path: '/typography',
-		view: 'Typography'
-	},
-	{
-		path: '/icons',
-		view: 'Icons'
-	},
-	{
-		path: '/maps',
-		view: 'Maps'
-	},
-	{
-		path: '/notifications',
-		view: 'Notifications'
-	},
-	{
-		path: '/upgrade',
-		name: 'Upgrade to PRO',
-		view: 'Upgrade'
+		path: '/profile',
+		name: 'Profile',
+		view: 'Profile',
+		meta: { requiresAuth: true }
 	}
 ];

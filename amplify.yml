@@ -10,7 +10,7 @@ frontend:
                 - npm run aws:generateAwsExport
                 - npm run build
     artifacts:
-        baseDirectory: dist
+        baseDirectory: build
         files:
             - '**/*'
     cache:
