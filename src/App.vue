@@ -1,23 +1,31 @@
 <template>
 	<v-app>
-		<div class='nav'>
-			<router-link tag="p" to="/">
-				<a>Home</a>
-			</router-link>
-			<router-link tag="p" to="/profile">
-				<a>Profile</a>
-			</router-link>
-			<router-link tag="p" to="/protected">
-				<a>Protected</a>
-			</router-link>
-			<router-link tag="p" to="/auth" v-if="!signedIn">
-				<a>Sign Up / Sign In</a>
-			</router-link>
-		</div>
-		<router-view></router-view>
-		<div class='sign-out' v-if="signedIn">
-			<amplify-sign-out></amplify-sign-out>
-		</div>
+		<v-toolbar app>
+			<v-toolbar-title class="headline">
+				<span class="font-weight-light">Email</span>
+			</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<SignOut/>
+		</v-toolbar>
+		
+		<v-content>
+			<div class='nav'>
+				<router-link tag="p" to="/">
+					<a>Home</a>
+				</router-link>
+				<router-link tag="p" to="/profile">
+					<a>Profile</a>
+				</router-link>
+				<router-link tag="p" to="/protected" v-if="signedIn">
+					<a>Protected</a>
+				</router-link>
+				<router-link tag="p" to="/auth" v-if="!signedIn">
+					<a>Sign Up / Sign In</a>
+				</router-link>
+			</div>
+			<router-view></router-view>
+		</v-content>
+	
 	</v-app>
 </template>
 
@@ -25,8 +33,11 @@
 	import { AmplifyEventBus } from 'aws-amplify-vue';
 	import { Auth } from 'aws-amplify';
 	
+	import SignOut from '@/components/Auth/SignOut';
+	
 	export default {
 		name: 'app',
+		components: { SignOut },
 		data() {
 			return {
 				signedIn: false

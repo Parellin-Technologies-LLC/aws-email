@@ -20,10 +20,9 @@ Vue.use( Router );
 // Create a new router
 const router = new Router( {
 	mode: 'history',
-	routes: paths.map( path => route( path.path, path.view, path.name ) )
-		.concat( [
-			{ path: '*', redirect: '/' }
-		] ),
+	routes: paths
+		.map( path => route( path.path, path.view, path.name ) )
+		.concat( [ { path: '*', redirect: '/' } ] ),
 	scrollBehavior( to, from, savedPosition ) {
 		if( savedPosition ) {
 			return savedPosition;
@@ -34,6 +33,7 @@ const router = new Router( {
 		}
 	},
 	beforeResolve( to, from, next ) {
+		console.log( to, from );
 		if( to.matched.some( record => record.meta.requiresAuth ) ) {
 			let user;
 			
@@ -43,9 +43,12 @@ const router = new Router( {
 						user = data;
 					}
 					
+					console.log( user );
+					
 					next();
 				} )
 				.catch( e => {
+					console.log( e );
 					next( { path: '/auth' } );
 				} );
 		}
