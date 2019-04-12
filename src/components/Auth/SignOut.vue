@@ -17,6 +17,10 @@
 			};
 		},
 		beforeCreate() {
+			AmplifyEventBus.$on( 'authState',
+				info => this.signedIn = info === 'signedIn'
+			);
+			
 			Auth.currentAuthenticatedUser()
 				.then( () => this.signedIn = true )
 				.catch( () => this.signedIn = false );
