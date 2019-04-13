@@ -4,11 +4,12 @@ import Router from 'vue-router';
 
 import paths from './paths';
 
-function route( path, view, name ) {
+function route( { path, name, view, meta } ) {
 	return {
 		name: name || view,
 		path,
-		component: async () => await import( `@/views/${ view }.vue` )
+		component: async () => await import( `@/views/${ view }.vue` ),
+		meta
 	};
 }
 
@@ -18,7 +19,7 @@ Vue.use( Router );
 const router = new Router( {
 	mode: 'history',
 	routes: paths
-		.map( path => route( path.path, path.view, path.name ) )
+		.map( path => route( path ) )
 		.concat( [ { path: '*', redirect: '/' } ] ),
 	scrollBehavior( to, from, savedPosition ) {
 		if( savedPosition ) {
@@ -30,7 +31,7 @@ const router = new Router( {
 		}
 	},
 	beforeResolve( to, from, next ) {
-		console.log( to, from );
+		console.log( 'beforeResolve', to, from );
 		if( to.matched.some( record => record.meta.requiresAuth ) ) {
 			let user;
 

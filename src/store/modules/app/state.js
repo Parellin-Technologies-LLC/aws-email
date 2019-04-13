@@ -1,3 +1,3 @@
 export default {
-	toggleSidebar: true
+	sidebarOpen: true
 };

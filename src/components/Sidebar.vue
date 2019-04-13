@@ -1,35 +1,28 @@
 <template>
-	<v-navigation-drawer v-model="drawer" clipped fixed app>
+	<v-navigation-drawer :value="isSidebarOpen" clipped fixed app>
 		
 		<v-list dense>
-			<v-list-tile @click="">
-				<v-list-tile-action>
-					<v-icon>dashboard</v-icon>
-				</v-list-tile-action>
-				<v-list-tile-content>
-					<v-list-tile-title>Dashboard</v-list-tile-title>
-				</v-list-tile-content>
-			</v-list-tile>
-			<v-list-tile @click="">
-				<v-list-tile-action>
-					<v-icon>settings</v-icon>
-				</v-list-tile-action>
-				<v-list-tile-content>
-					<v-list-tile-title>Settings</v-list-tile-title>
-				</v-list-tile-content>
-			</v-list-tile>
+			
+			<DashboardSidebar v-if="$route.name === 'Dashboard'"/>
+			<EmailSidebar v-if="$route.name === 'Email'"/>
+			<ProfileSidebar v-if="$route.name === 'Profile'"/>
+		
 		</v-list>
 	
 	</v-navigation-drawer>
 </template>
 
 <script>
+	import { mapGetters } from 'vuex';
+	import DashboardSidebar from '@/components/Sidebar/DashboardSidebar';
+	import EmailSidebar from '@/components/Sidebar/EmailSidebar';
+	import ProfileSidebar from '@/components/Sidebar/ProfileSidebar';
+	
 	export default {
 		name: 'Sidebar',
-		data() {
-			return {
-				drawer: null
-			};
+		components: { ProfileSidebar, EmailSidebar, DashboardSidebar },
+		computed: {
+			...mapGetters( 'app', [ 'isSidebarOpen' ] )
 		}
 	};
 </script>

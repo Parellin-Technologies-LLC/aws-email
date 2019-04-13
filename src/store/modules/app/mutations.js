@@ -1,5 +1,5 @@
 export default {
 	toggleSidebar( state ) {
-		state.toggleSidebar = !state.toggleSidebar;
+		state.sidebarOpen = !state.sidebarOpen;
 	}
 };
