@@ -1,47 +1,34 @@
 <template>
 	<v-btn v-if="signedIn" @click="signOut" flat>
-		{{ options.signOutButton }}
+		Sign Out
 	</v-btn>
 </template>
 
 <script>
+	import { mapGetters } from 'vuex';
 	import { AmplifyEventBus } from 'aws-amplify-vue';
-	import { Auth } from 'aws-amplify';
 	
 	export default {
 		name: 'SignOut',
 		data() {
 			return {
-				signedIn: false,
 				logger: {}
 			};
 		},
-		beforeCreate() {
-			AmplifyEventBus.$on( 'authState',
-				info => this.signedIn = info === 'signedIn'
-			);
-			
-			Auth.currentAuthenticatedUser()
-				.then( () => this.signedIn = true )
-				.catch( () => this.signedIn = false );
-		},
 		computed: {
-			options() {
-				return {
-					signOutButton: this.$Amplify.I18n.get( 'Sign Out' )
-				};
-			}
+			...mapGetters( 'auth', {
+				signedIn: 'getSignedIn'
+			} )
 		},
 		async mounted() {
 			this.logger = new this.$Amplify.Logger( this.$options.name );
 		},
 		methods: {
-			async signOut( event ) {
+			async signOut() {
 				try {
 					await this.$Amplify.Auth.signOut();
-					this.signedIn = false;
 					this.logger.info( 'sign out success' );
-					return AmplifyEventBus.$emit( 'authState', 'signedOut' );
+					AmplifyEventBus.$emit( 'authState', 'signedOut' );
 				} catch( e ) {
 					console.error( e );
 				}

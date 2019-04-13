@@ -1,4 +1,5 @@
 export default {
-	user: {},
-	signedIn: false
+	authState: 'signedOut',
+	signedIn: false,
+	user: {}
 };

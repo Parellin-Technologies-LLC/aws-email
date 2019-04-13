@@ -20,5 +20,11 @@ export default [
 		name: 'Profile',
 		view: 'Profile',
 		meta: { requiresAuth: true }
+	},
+	{
+		path: '/dashboard',
+		name: 'Dashboard',
+		view: 'Dashboard',
+		meta: { requiresAuth: true }
 	}
 ];

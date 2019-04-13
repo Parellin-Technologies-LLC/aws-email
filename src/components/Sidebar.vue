@@ -1,5 +1,6 @@
 <template>
 	<v-navigation-drawer v-model="drawer" clipped fixed app>
+		
 		<v-list dense>
 			<v-list-tile @click="">
 				<v-list-tile-action>
@@ -18,16 +19,17 @@
 				</v-list-tile-content>
 			</v-list-tile>
 		</v-list>
+	
 	</v-navigation-drawer>
 </template>
 
 <script>
 	export default {
-		data: () => ( {
-			drawer: null
-		} ),
-		props: {
-			source: String
+		name: 'Sidebar',
+		data() {
+			return {
+				drawer: null
+			};
 		}
 	};
 </script>

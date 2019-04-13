@@ -1,9 +1,7 @@
-// Lib imports
 import Vue from 'vue';
 import Meta from 'vue-meta';
 import Router from 'vue-router';
 
-// Routes
 import paths from './paths';
 
 function route( path, view, name ) {
@@ -17,7 +15,6 @@ function route( path, view, name ) {
 Vue.use( Meta );
 Vue.use( Router );
 
-// Create a new router
 const router = new Router( {
 	mode: 'history',
 	routes: paths
@@ -36,15 +33,15 @@ const router = new Router( {
 		console.log( to, from );
 		if( to.matched.some( record => record.meta.requiresAuth ) ) {
 			let user;
-			
+
 			Vue.prototype.$Amplify.Auth.currentAuthenticatedUser()
 				.then( data => {
 					if( data && data.signInUserSession ) {
 						user = data;
 					}
-					
+
 					console.log( user );
-					
+
 					next();
 				} )
 				.catch( e => {
@@ -52,7 +49,7 @@ const router = new Router( {
 					next( { path: '/auth' } );
 				} );
 		}
-		
+
 		next();
 	}
 } );

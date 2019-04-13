@@ -2,6 +2,7 @@
 	<v-app>
 		
 		<Toolbar/>
+		<Sidebar/>
 		
 		<v-content>
 			<router-view></router-view>
@@ -11,78 +12,50 @@
 </template>
 
 <script>
+	import { mapGetters, mapActions } from 'vuex';
 	import { AmplifyEventBus } from 'aws-amplify-vue';
-	import { Auth } from 'aws-amplify';
-	
-	import SignOut from '@/components/Auth/SignOut';
 	import Toolbar from '@/components/Toolbar';
+	import Sidebar from '@/components/Sidebar';
 	
 	export default {
 		name: 'App',
-		components: { Toolbar, SignOut },
-		data() {
-			return {
-				user: {},
-				signedIn: false
-			};
-		},
-		async beforeCreate() {
-			AmplifyEventBus.$on( 'authState', info => {
-				this.setAuthState( info === 'signedIn' );
-				
-				if( info === 'signedIn' ) {
-					this.$router.push( '/' );
-				} else if( info === 'signedOut' ) {
-					this.$router.push( '/auth' );
+		components: { Sidebar, Toolbar },
+		beforeCreate() {
+			AmplifyEventBus.$on( 'authState',
+				info => {
+					this.authState( info );
+					
+					if( info === 'signedIn' ) {
+						this.$router.push( '/dashboard' );
+					} else if( info === 'signedOut' ) {
+						this.$router.push( '/auth' );
+					}
 				}
-			} );
+			);
+		},
+		async mounted() {
+			await this.currentSession();
 			
-			try {
-				const user = await Auth.currentAuthenticatedUser();
-				this.setUser( user );
-				this.setAuthState( true );
-			} catch( e ) {
-				this.setAuthState( false );
+			if( !this.signedIn ) {
+				this.$router.push( '/auth' );
+			} else {
+				this.$router.push( '/dashboard' );
 			}
-			
-			console.log( this.$store );
+		},
+		computed: {
+			...mapGetters( 'auth', {
+				signedIn: 'getSignedIn'
+			} )
 		},
 		methods: {
-			setAuthState( state ) {
-				console.log( state );
-				
-				this.$store.state.signedIn = state;
-			},
-			setUser( user ) {
-				this.$store.state.user = user;
-			}
+			...mapActions( 'auth', [
+				'currentSession',
+				'authState'
+			] )
 		}
 	};
 </script>
 
 <style lang="scss">
 	@import '@/styles/index.scss';
-	
-	.nav {
-		display: flex;
-	}
-	
-	.nav p {
-		padding: 0px 30px 0px 0px;
-		font-size: 18px;
-		color: #000;
-	}
-	
-	.nav p:hover {
-		opacity: .7;
-	}
-	
-	.nav p a {
-		text-decoration: none;
-	}
-	
-	.sign-out {
-		width: 160px;
-		margin: 0 auto;
-	}
 </style>
