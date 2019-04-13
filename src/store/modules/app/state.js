@@ -1,5 +1,3 @@
 export default {
-	drawer: null,
-	color: 'success',
-	image: ''
+	sidebarOpen: true
 };

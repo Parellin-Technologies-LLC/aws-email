@@ -1,74 +1,56 @@
 <template>
-	<v-content>
-		<v-flex xs12 sm12 md12>
-			<v-card class="elevation-1">
+	<v-card class="elevation-1">
+		
+		<v-toolbar dark color="success">
+			<v-toolbar-title>Reset your password</v-toolbar-title>
+		</v-toolbar>
+		
+		<v-card-text>
+			<v-form ref="form" lazy-validation>
 				
-				<v-toolbar dark color="success">
-					<v-toolbar-title>{{ options.header }}</v-toolbar-title>
-					<v-spacer></v-spacer>
-				</v-toolbar>
+				<UsernameField
+					v-model="username"
+					:onKeyupEnter="sendCode"/>
 				
-				<v-card-text>
-					<v-form>
-						<v-text-field
-							prepend-icon="mdi-account"
-							type="text"
-							name="username"
-							label="Username"
-							v-model="username"
-							v-on:keyup.enter="signIn"
-							autofocus>
-						</v-text-field>
-						
-						<v-text-field
-							v-if="sent"
-							prepend-icon="mdi-counter"
-							type="text"
-							name="code"
-							label="Code"
-							v-model="code"
-							v-on:keyup.enter="signIn">
-						</v-text-field>
-						
-						<v-text-field
-							v-if="sent"
-							prepend-icon="mdi-lock"
-							type="password"
-							name="password"
-							label="New Password"
-							v-model="password"
-							v-on:keyup.enter="signIn">
-						</v-text-field>
-					</v-form>
-				</v-card-text>
+				<v-text-field
+					v-if="codeSent"
+					prepend-icon="mdi-counter"
+					type="text"
+					name="code"
+					label="Code"
+					v-model="code"
+					v-on:keyup.enter="sendCode"
+					:rules="codeRules"
+					required>
+				</v-text-field>
 				
-				<v-card-actions>
-					<v-layout justify-start row>
-						<v-flex
-							v-if="!sent"
-							@click="signIn"
-							xs12 sm4 text-xs-left>
-							<div>
-								<v-btn color="primary" small>
-									Back to Sign In
-								</v-btn>
-							</div>
-						</v-flex>
-						
-						<v-flex
-							v-if="sent"
-							@click="submit"
-							xs12 sm4 text-xs-left>
-							<div>
-								<v-btn color="primary" small>
-									Resend Code
-								</v-btn>
-							</div>
-						</v-flex>
-					</v-layout>
+				<PasswordField
+					v-if="codeSent"
+					v-model="password"
+					label="New Password"
+					:onKeyupEnter="sendCode"/>
+			</v-form>
+		</v-card-text>
+		
+		<v-card-actions>
+			<v-flex xs12>
+				<v-layout align-end justify-space-between fill-height>
+					<v-btn
+						v-if="!codeSent"
+						@click="sendCode"
+						color="primary">
+						Back to Sign In
+					</v-btn>
 					
 					<v-btn
-						v-if="!sent"
+						v-if="codeSent"
+						@click="submit"
+						color="primary">
+						Resend Code
+					</v-btn>
+					
+					<v-btn
+						v-if="!codeSent"
 						color="primary"
 						@click="submit"
 						:disabled="!username">
@@ -76,38 +58,46 @@
 					</v-btn>
 					
 					<v-btn
-						v-if="sent"
+						v-if="codeSent"
 						color="primary"
 						@click="verify"
 						:disabled="!username">
 						Submit
 					</v-btn>
-				</v-card-actions>
-				
-				<NotificationBar
-					:active="status.active"
-					:type="status.type"
-					:icon="status.icon"
-					:msg="status.msg"/>
-			
-			</v-card>
-		</v-flex>
-	</v-content>
+				</v-layout>
+			</v-flex>
+		</v-card-actions>
+		
+		<NotificationBar
+			:active="status.active"
+			:type="status.type"
+			:icon="status.icon"
+			:msg="status.msg"/>
+	
+	</v-card>
 </template>
 
 <script>
 	import { AmplifyEventBus } from 'aws-amplify-vue';
 	import NotificationBar from '@/components/NotificationBar';
+	import UsernameField from '@/components/Auth/UsernameField';
+	import PasswordField from '@/components/Auth/PasswordField';
+	
+	// TODO:: continue cleaning up this component
 	
 	export default {
 		name: 'ForgotPassword',
-		components: { NotificationBar },
+		components: { UsernameField, PasswordField, NotificationBar },
 		data() {
 			return {
 				username: '',
 				code: '',
 				password: '',
-				sent: false,
+				codeRules: [
+					v => !!v || 'Code is required',
+					v => ( v && /^[0-9]{6,8}$/.test( v ) ) || 'Code must be 6-8 numbers'
+				],
+				codeSent: false,
 				status: {
 					active: false,
 					type: 'success',
@@ -116,13 +106,6 @@
 				},
 				logger: {}
 			};
-		},
-		computed: {
-			options() {
-				return {
-					header: 'Reset your password'
-				};
-			}
 		},
 		mounted() {
 			this.logger = new this.$Amplify.Logger( this.$options.name );
@@ -139,7 +122,7 @@
 						`${ CodeDeliveryDetails.DeliveryMedium } sent to ${ CodeDeliveryDetails.Destination }`
 					);
 					
-					this.sent = true;
+					this.codeSent = true;
 					this.logger.info( 'forgotPassword success' );
 				} catch( e ) {
 					this.setStatus( 'error', 'warning', e );
@@ -154,7 +137,7 @@
 					this.setStatus( 'error', 'warning', e );
 				}
 			},
-			signIn() {
+			sendCode() {
 				AmplifyEventBus.$emit( 'authState', 'signedOut' );
 			},
 			setStatus( type, icon, msg ) {

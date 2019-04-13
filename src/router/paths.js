@@ -2,23 +2,44 @@ export default [
 	{
 		path: '/',
 		name: 'Home',
-		view: 'Home'
+		view: 'Home',
+		meta: {
+			isDashboard: false
+		}
 	},
 	{
 		path: '/auth',
 		name: 'Auth',
-		view: 'Auth'
+		view: 'Auth',
+		meta: {
+			isDashboard: false
+		}
 	},
 	{
-		path: '/protected',
-		name: 'Protected',
-		view: 'Protected',
-		meta: { requiresAuth: true }
+		path: '/dashboard',
+		name: 'Dashboard',
+		view: 'Dashboard',
+		meta: {
+			isDashboard: true,
+			requiresAuth: true
+		}
+	},
+	{
+		path: '/email',
+		name: 'Email',
+		view: 'Email',
+		meta: {
+			isDashboard: true,
+			requiresAuth: true
+		}
 	},
 	{
 		path: '/profile',
 		name: 'Profile',
 		view: 'Profile',
-		meta: { requiresAuth: true }
+		meta: {
+			isDashboard: true,
+			requiresAuth: true
+		}
 	}
 ];

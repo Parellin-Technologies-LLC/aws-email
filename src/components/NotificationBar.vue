@@ -12,6 +12,7 @@
 </template>
 
 <script>
+	// TODO::: clean up this module
 	export default {
 		name: 'NotificationBar',
 		inheritAttrs: false,
@@ -21,12 +22,9 @@
 				default: false
 			},
 			get active() {
-				console.log( 'get', this );
 				return this._active;
 			},
 			set active( v ) {
-				console.log( 'set', this, v );
-				
 				this._active = v;
 				
 				clearTimeout( this.activeTimer );
