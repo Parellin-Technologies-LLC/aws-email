@@ -40,8 +40,6 @@
 			
 			if( !this.signedIn ) {
 				this.$router.push( '/auth' );
-			} else {
-				this.$router.push( '/dashboard' );
 			}
 		},
 		computed: {

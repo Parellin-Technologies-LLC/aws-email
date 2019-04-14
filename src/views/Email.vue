@@ -9,7 +9,15 @@
 </template>
 
 <script>
+	import { mapActions } from 'vuex';
+	
 	export default {
-		name: 'Email'
+		name: 'Email',
+		mounted() {
+			this.loadEmailConfig();
+		},
+		methods: {
+			...mapActions( 'email', [ 'loadEmailConfig' ] )
+		}
 	};
 </script>

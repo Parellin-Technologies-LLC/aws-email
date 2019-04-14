@@ -10,6 +10,7 @@
 		"dev": "vue-cli-service serve"
 	},
 	"dependencies": {
+		"@aws-amplify/auth": "1.2.22",
 		"aws-amplify": "1.1.22",
 		"aws-amplify-vue": "0.2.7",
 		"babel-polyfill": "6.26.0",
