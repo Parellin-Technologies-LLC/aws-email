@@ -22,8 +22,7 @@
 				
 				<v-list-group
 					no-action
-					sub-group
-					value="true">
+					sub-group>
 					
 					<template v-slot:activator>
 						<v-list-tile>
