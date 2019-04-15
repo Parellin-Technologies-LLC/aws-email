@@ -9,26 +9,26 @@ export default {
 			config = config.Body.toString();
 			config = JSON.parse( config );
 		} catch( e ) {
-			config = { folders: [ 'inbox', 'sent', 'drafts', 'spam', 'trash' ] };
+			config = {
+				folder: [
+					[ 'inbox', 'inbox' ],
+					[ 'sent', 'mdi-arrow-right' ],
+					[ 'drafts', 'mdi-file-document-edit-outline' ],
+					[ 'spam', 'mdi-alert-circle' ],
+					[ 'trash', 'mdi-trash-can-outline' ]
+				]
+			};
+
 			await Storage.vault.put( 'config.json', JSON.stringify( config ) );
 		}
 
-		console.log( config );
+		context.commit( 'setEmailConfig', config );
 	},
-	async listFolders( context ) {
+	async listFolder( context ) {
 		try {
-			const session = await Storage.currentSession();
-			context.commit( 'setSignedIn', session.isValid() );
+
 		} catch( e ) {
 			context.commit( 'setSignedIn', false );
-		}
-	},
-	async currentAuthenticatedUser( context ) {
-		try {
-			const user = await Auth.currentAuthenticatedUser();
-			context.commit( 'setUser', user );
-		} catch( e ) {
-			context.commit( 'setUser', {} );
 		}
 	}
 };

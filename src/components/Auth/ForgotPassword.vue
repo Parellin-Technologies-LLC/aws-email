@@ -10,7 +10,7 @@
 				
 				<UsernameField
 					v-model="username"
-					:onKeyupEnter="sendCode"/>
+					:onKeyupEnter="submit"/>
 				
 				<v-text-field
 					v-if="codeSent"
@@ -19,7 +19,7 @@
 					name="code"
 					label="Code"
 					v-model="code"
-					v-on:keyup.enter="sendCode"
+					v-on:keyup.enter="submit"
 					:rules="codeRules"
 					required>
 				</v-text-field>
@@ -28,7 +28,7 @@
 					v-if="codeSent"
 					v-model="password"
 					label="New Password"
-					:onKeyupEnter="sendCode"/>
+					:onKeyupEnter="submit"/>
 			</v-form>
 		</v-card-text>
 		
@@ -37,7 +37,7 @@
 				<v-layout align-end justify-space-between fill-height>
 					<v-btn
 						v-if="!codeSent"
-						@click="sendCode"
+						@click="backToSignin"
 						color="primary">
 						Back to Sign In
 					</v-btn>
@@ -137,7 +137,7 @@
 					this.setStatus( 'error', 'warning', e );
 				}
 			},
-			sendCode() {
+			backToSignin() {
 				AmplifyEventBus.$emit( 'authState', 'signedOut' );
 			},
 			setStatus( type, icon, msg ) {
