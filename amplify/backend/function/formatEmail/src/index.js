@@ -8,6 +8,8 @@ const
 	{ simpleParser } = require( 'mailparser' );
 
 exports.handler = async ( event, context ) => {
+	console.log( JSON.stringify( process.env, null, 4 ) );
+	console.log( JSON.stringify( event, null, 4 ) );
 	try {
 		const
 			s3obj        = {
@@ -20,7 +22,7 @@ exports.handler = async ( event, context ) => {
 			emailAddress = eml.to.text,
 			userList     = await COG.listUsers( {
 				Filter: `email = "${ emailAddress }"`,
-				UserPoolId: 'us-east-1_pstEAjbvq'
+				UserPoolId: ''
 			} ).promise();
 
 		if( !userList.Users.length ) {

@@ -22,20 +22,11 @@
 		}
 	},
 	"function": {
-		"formatEmail": {
+		"formatemail": {
 			"service": "Lambda",
 			"providerPlugin": "awscloudformation",
 			"build": true,
-			"dependsOn": [
-				{
-					"category": "storage",
-					"resourceName": "awsemaillist",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				}
-			]
+			"dependsOn": []
 		}
 	}
 }
