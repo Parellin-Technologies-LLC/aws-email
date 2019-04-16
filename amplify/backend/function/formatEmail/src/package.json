@@ -1,0 +1,23 @@
+{
+	"name": "formatemail",
+	"version": "1.0.0",
+	"description": "Format email on event of raw email",
+	"main": "index.js",
+	"dependencies": {
+		"aws-sdk": "^2.49.0",
+		"aws-serverless-express": "^3.3.5",
+		"body-parser": "^1.17.1",
+		"express": "^4.15.2",
+		"mailparser": "2.6.0"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Parellin-Technologies-LLC/aws-email.git"
+	}
+}

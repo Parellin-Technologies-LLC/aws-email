@@ -34,7 +34,7 @@
 					<v-list-tile
 						v-for="(folder, i) in config.folder"
 						:key="i"
-						@click="selectFolder( folder[ 0 ] )">
+						@click="listFolder( folder[ 0 ] )">
 						<v-list-tile-title>{{ folder[ 0 ] }}</v-list-tile-title>
 						<v-list-tile-action>
 							<v-icon>{{ folder[ 1 ] }}</v-icon>
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-	import { mapGetters } from 'vuex';
+	import { mapGetters, mapActions } from 'vuex';
 	
 	export default {
 		name: 'EmailSidebar',
@@ -91,11 +91,9 @@
 			} )
 		},
 		methods: {
+			...mapActions( 'email', [ 'listFolder' ] ),
 			createEmail() {
 				console.log( 'here' );
-			},
-			selectFolder( folder ) {
-				console.log( folder );
 			}
 		}
 	};

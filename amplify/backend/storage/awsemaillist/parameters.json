@@ -1,0 +1,7 @@
+{
+    "tableName": "awsemaillist",
+    "partitionKeyName": "uid",
+    "partitionKeyType": "S",
+    "sortKeyName": "ts",
+    "sortKeyType": "N"
+}
