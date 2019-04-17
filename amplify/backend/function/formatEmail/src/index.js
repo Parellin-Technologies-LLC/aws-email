@@ -31,6 +31,7 @@ exports.handler = async ( event, context ) => {
 			return context.done( 'Serious problem, two users with the same email!' );
 		}
 
+		// TODO: at some point, get user config to filter out spam
 		const
 			{ Value: uid } = userList.Users[ 0 ]
 				.Attributes

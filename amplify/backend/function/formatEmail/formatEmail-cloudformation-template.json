@@ -4,6 +4,22 @@
 	"Parameters": {
 		"env": {
 			"Type": "String"
+		},
+		"storageawsemaillistName": {
+			"Type": "String",
+			"Default": "storageawsemaillistName"
+		},
+		"storageawsemaillistArn": {
+			"Type": "String",
+			"Default": "storageawsemaillistArn"
+		},
+		"storageawsemailstorageName": {
+			"Type": "String",
+			"Default": "storageawsemailstorageName"
+		},
+		"storageawsemailstorageArn": {
+			"Type": "String",
+			"Default": "storageawsemailstorageArn"
 		}
 	},
 	"Conditions": {
@@ -60,7 +76,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "aws-email-20190315163601-deployment",
-					"S3Key": "amplify-builds/formatemail-1555457993-latest-build.zip"
+					"S3Key": "amplify-builds/formatemail-1555459326-latest-build.zip"
 				}
 			}
 		},
@@ -70,12 +86,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"awsemailLambdaRole79dbde55",
+						"awsemailLambdaRole9500ee47",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"awsemailLambdaRole79dbde55",
+									"awsemailLambdaRole9500ee47",
 									"-",
 									{
 										"Ref": "env"
@@ -141,6 +157,22 @@
 									}
 								]
 							}
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"dynamodb:GetItem",
+								"dynamodb:Query",
+								"dynamodb:Scan",
+								"dynamodb:PutItem",
+								"dynamodb:UpdateItem",
+								"dynamodb:DeleteItem"
+							],
+							"Resource": [
+								{
+									"Ref": "storageawsemaillistArn"
+								}
+							]
 						}
 					]
 				}

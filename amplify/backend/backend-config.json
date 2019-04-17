@@ -14,7 +14,17 @@
 	"storage": {
 		"awsemailstorage": {
 			"service": "S3",
-			"providerPlugin": "awscloudformation"
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "formatemail",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			]
 		},
 		"awsemaillist": {
 			"service": "DynamoDB",
@@ -26,7 +36,24 @@
 			"service": "Lambda",
 			"providerPlugin": "awscloudformation",
 			"build": true,
-			"dependsOn": []
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "awsemailstorage",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				},
+				{
+					"category": "storage",
+					"resourceName": "awsemaillist",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			]
 		}
 	}
 }
