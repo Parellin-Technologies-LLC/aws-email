@@ -30,5 +30,6 @@
 	"s3ReadPolicy": "read_policy_fc0d73e6",
 	"s3PermissionsGuestPublic": "DISALLOW",
 	"s3PermissionsGuestUploads": "DISALLOW",
-	"GuestAllowList": "DISALLOW"
+	"GuestAllowList": "DISALLOW",
+	"functionformatemailName": "formatemail"
 }

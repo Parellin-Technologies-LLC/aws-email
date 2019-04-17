@@ -7,9 +7,18 @@ const
 	COG              = new AWS.CognitoIdentityServiceProvider( { region: 'us-east-1' } ),
 	{ simpleParser } = require( 'mailparser' );
 
+const
+	config = require( '../../../amplify-meta' );
+
 exports.handler = async ( event, context ) => {
-	console.log( JSON.stringify( process.env, null, 4 ) );
-	console.log( JSON.stringify( event, null, 4 ) );
+	console.log( config );
+
+	const
+		UserPoolId = Object.keys( config.auth )
+			.reduce(
+				( r, k ) => ( r = config.auth[ k ].output.UserPoolId, r ), ''
+			);
+
 	try {
 		const
 			s3obj        = {
@@ -22,7 +31,7 @@ exports.handler = async ( event, context ) => {
 			emailAddress = eml.to.text,
 			userList     = await COG.listUsers( {
 				Filter: `email = "${ emailAddress }"`,
-				UserPoolId: ''
+				UserPoolId
 			} ).promise();
 
 		if( !userList.Users.length ) {
@@ -51,14 +60,14 @@ exports.handler = async ( event, context ) => {
 			};
 
 		await S3.putObject( {
-			Bucket: 'email-system-storage',
+			Bucket: process.env.EmailStorage,
 			ContentType: 'application/json',
 			Key: Item.key,
 			Body: JSON.stringify( eml )
 		} ).promise();
 
 		await DDB.put( {
-			TableName: 'emailIndexList',
+			TableName: process.env.EmailDB,
 			Item
 		} ).promise();
 

@@ -63,7 +63,9 @@
 					"Variables": {
 						"ENV": {
 							"Ref": "env"
-						}
+						},
+						"EmailStorage": "awsemailstorage",
+						"EmailDB": "awsemaillist"
 					}
 				},
 				"Role": {
@@ -76,7 +78,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "aws-email-20190315163601-deployment",
-					"S3Key": "amplify-builds/formatemail-1555459326-latest-build.zip"
+					"S3Key": "amplify-builds/formatemail-1555468921-latest-build.zip"
 				}
 			}
 		},

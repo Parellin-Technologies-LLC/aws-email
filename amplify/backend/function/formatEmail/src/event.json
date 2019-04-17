@@ -1,5 +1,38 @@
 {
-    "key1": "value1",
-    "key2": "value2",
-    "key3": "value3"
+	"Records": [
+		{
+			"eventVersion": "2.1",
+			"eventSource": "aws:s3",
+			"awsRegion": "us-east-1",
+			"eventTime": "2019-04-17T02:18:05.770Z",
+			"eventName": "ObjectCreated:Put",
+			"userIdentity": {
+				"principalId": "AWS:AIDAIE26RTG3F45XIHQFI"
+			},
+			"requestParameters": {
+				"sourceIPAddress": "10.89.23.105"
+			},
+			"responseElements": {
+				"x-amz-request-id": "2073FEB5B38C8BB2",
+				"x-amz-id-2": "UbsP5pxi4oOAEq3vwvcJnsr/xvrwQyqEAKPeRLjkAuJxCwoebephbTp9whYKHKpe/KntjbucsNM="
+			},
+			"s3": {
+				"s3SchemaVersion": "1.0",
+				"configurationId": "9fc6fe60-1d99-4511-83b3-4a26cf5913ec",
+				"bucket": {
+					"name": "awsemailstorage-dev",
+					"ownerIdentity": {
+						"principalId": "AW0UEFSGPR1B8"
+					},
+					"arn": "arn:aws:s3:::awsemailstorage-dev"
+				},
+				"object": {
+					"key": "raw-email/admin%40codebuddha.io/8q639dqhetqubrs29ec8pt8pj9tir2qmf73laqo1",
+					"size": 31863,
+					"eTag": "4b942efdc27d9c03356ede8349347ab6",
+					"sequencer": "005CB68CDDB5128EB4"
+				}
+			}
+		}
+	]
 }
