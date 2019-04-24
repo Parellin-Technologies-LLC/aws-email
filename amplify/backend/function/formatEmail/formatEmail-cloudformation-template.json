@@ -78,7 +78,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "aws-email-20190315163601-deployment",
-					"S3Key": "amplify-builds/formatemail-1555468921-latest-build.zip"
+					"S3Key": "amplify-builds/formatemail-1556063361-latest-build.zip"
 				}
 			}
 		},
@@ -88,12 +88,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"awsemailLambdaRole9500ee47",
+						"awsemailLambdaRole455c10d8",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"awsemailLambdaRole9500ee47",
+									"awsemailLambdaRole455c10d8",
 									"-",
 									{
 										"Ref": "env"
@@ -173,6 +173,24 @@
 							"Resource": [
 								{
 									"Ref": "storageawsemaillistArn"
+								}
+							]
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"s3:GetObject"
+							],
+							"Resource": [
+								{
+									"Fn::Join": [
+										"",
+										[
+											"arn:aws:s3:::",
+											"awsemailstorage",
+											"/*"
+										]
+									]
 								}
 							]
 						}

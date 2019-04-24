@@ -10,6 +10,7 @@ const
 const
 	config = require( '../../../amplify-meta' );
 
+// TODO:: request help - CloudFormation env for bucket variables
 exports.handler = async ( event, context ) => {
 	console.log( config );
 
@@ -28,11 +29,15 @@ exports.handler = async ( event, context ) => {
 			raweml       = await S3.getObject( s3obj ).promise(),
 			rawBody      = raweml.Body.toString(),
 			eml          = await simpleParser( rawBody ),
-			emailAddress = eml.to.text,
-			userList     = await COG.listUsers( {
+			emailAddress = eml.to.text;
+
+		const
+			userList = await COG.listUsers( {
 				Filter: `email = "${ emailAddress }"`,
 				UserPoolId
 			} ).promise();
+
+		console.log( userList.Users[ 0 ] );
 
 		if( !userList.Users.length ) {
 			return context.done( 'User does not exist' );
