@@ -37,6 +37,7 @@
 		},
 		async mounted() {
 			await this.currentSession();
+			await this.currentAuthenticatedUser();
 			
 			if( !this.signedIn ) {
 				this.$router.push( '/auth' );
@@ -49,8 +50,9 @@
 		},
 		methods: {
 			...mapActions( 'auth', [
+				'authState',
 				'currentSession',
-				'authState'
+				'currentAuthenticatedUser'
 			] )
 		}
 	};

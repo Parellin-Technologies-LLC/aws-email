@@ -175,6 +175,10 @@ Resources:
           Name: email
           Required: true
           Mutable: true
+        -
+          Name: identity_id
+          Mutable: true
+          AttributeDataType: String
         
       
       AutoVerifiedAttributes: !Ref autoVerifiedAttributes
@@ -385,4 +389,3 @@ Outputs :
    
   
    
-  
