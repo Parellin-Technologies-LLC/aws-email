@@ -22,6 +22,14 @@ export default {
 	async currentAuthenticatedUser( context ) {
 		try {
 			const user = await Auth.currentAuthenticatedUser();
+
+			if( !user.attributes.hasOwnProperty( 'custom:identity_id' ) ) {
+				const IdentityPoolID = Auth._config.aws_cognito_identity_pool_id;
+				await Auth.updateUserAttributes( user, {
+					'custom:identity_id': user.storage[ `aws.cognito.identity-id.${ IdentityPoolID }` ]
+				} );
+			}
+
 			context.commit( 'setUser', user );
 		} catch( e ) {
 			context.commit( 'setUser', {} );

@@ -13,10 +13,14 @@
 	
 	export default {
 		name: 'Email',
-		mounted() {
+		async mounted() {
+			await this.currentAuthenticatedUser();
 			this.loadEmailConfig();
 		},
 		methods: {
+			...mapActions( 'auth', [
+				'currentAuthenticatedUser'
+			] ),
 			...mapActions( 'email', [ 'loadEmailConfig' ] )
 		}
 	};
