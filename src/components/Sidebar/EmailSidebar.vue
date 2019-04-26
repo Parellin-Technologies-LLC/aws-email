@@ -14,7 +14,7 @@
 				prepend-icon="email"
 				value="true">
 				
-				<template v-slot:activator>
+				<template slot="activator">
 					<v-list-tile>
 						<v-list-tile-title>Folders</v-list-tile-title>
 					</v-list-tile>
@@ -25,7 +25,7 @@
 					sub-group
 					value="true">
 					
-					<template v-slot:activator>
+					<template slot="activator">
 						<v-list-tile>
 							<v-list-tile-title>Folders</v-list-tile-title>
 						</v-list-tile>
@@ -46,7 +46,7 @@
 					sub-group
 					no-action>
 					
-					<template v-slot:activator>
+					<template slot="activator">
 						<v-list-tile>
 							<v-list-tile-title>Actions</v-list-tile-title>
 						</v-list-tile>

@@ -7,10 +7,9 @@
 		:pagination.sync="pagination"
 		:total-items="estimateItemsInFolder"
 		select-all
-		item-key="key"
-		class="elevation-1">
+		item-key="key">
 		
-		<template v-slot:headers="props">
+		<template slot="headers" slot-scope="props">
 			<tr>
 				<th>
 					<v-checkbox
@@ -40,17 +39,20 @@
 		
 		<v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
 		
-		<template v-slot:items="props">
-			<tr :active="props.selected" @click="props.selected = !props.selected">
+		<template slot="items" slot-scope="props">
+			<tr :active="props.selected">
+				
 				<td>
 					<v-checkbox
+						v-model="props.selected"
 						:input-value="props.selected"
+						@click="props.selected = !props.selected"
 						primary
-						hide-details
-					></v-checkbox>
+						hide-details>
+					</v-checkbox>
 				</td>
 				
-				<td>{{ props.item.from }}</td>
+				<td @click="openEmailModal( props )">{{ props.item.from }}</td>
 				<td class="text-xs-right">{{ props.item.subject }}</td>
 				<td class="text-xs-right">{{ props.item.ts }}</td>
 			</tr>
@@ -111,9 +113,13 @@
 		methods: {
 			...mapActions( 'email', [
 				'listFolder',
-				'countItemsInFolder'
+				'countItemsInFolder',
+				'loadEmail'
 			] ),
 			...mapMutations( 'email', [ 'setPageLimit' ] ),
+			openEmailModal( email ) {
+				this.loadEmail( email.item );
+			},
 			toggleAll() {
 				if( this.selected.length ) {
 					this.selected = [];
@@ -137,7 +143,7 @@
 					
 					this.setPageLimit( Limit );
 					await this.countItemsInFolder();
-					await this.listFolder();
+					// await this.listFolder();
 				}, 1000
 			);
 		}

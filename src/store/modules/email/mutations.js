@@ -36,5 +36,8 @@ export default {
 				return email;
 			}
 		);
+	},
+	setOpenEmail( state, email ) {
+		state.openEmail   = email;
 	}
 };

@@ -21,5 +21,6 @@ export default {
 			value: 'ts'
 		}
 	],
-	emailData: []
+	emailData: [],
+	openEmail: {}
 };

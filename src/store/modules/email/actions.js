@@ -51,7 +51,7 @@ export default {
 			`/email/${ context.rootState.auth.identityId }`,
 			params
 		);
-		
+
 		context.commit( 'setEstimateItemsInFolder', data.Count );
 	},
 	async listFolder( context, opts = {} ) {
@@ -103,5 +103,8 @@ export default {
 		} catch( e ) {
 			console.log( e );
 		}
+	},
+	async loadEmail( { commit }, email ) {
+		commit( 'setOpenEmail', email );
 	}
 };

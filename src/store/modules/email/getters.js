@@ -22,5 +22,8 @@ export default {
 	},
 	getEmailData( state ) {
 		return state.emailData;
+	},
+	getOpenEmail( state ) {
+		return state.openEmail;
 	}
 };
