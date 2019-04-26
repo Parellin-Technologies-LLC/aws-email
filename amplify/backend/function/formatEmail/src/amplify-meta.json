@@ -1,0 +1,126 @@
+{
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "aws-email-20190315163601-authRole",
+			"UnauthRoleArn": "arn:aws:iam::678103615909:role/aws-email-20190315163601-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::678103615909:role/aws-email-20190315163601-authRole",
+			"Region": "us-east-1",
+			"DeploymentBucketName": "aws-email-20190315163601-deployment",
+			"UnauthRoleName": "aws-email-20190315163601-unauthRole",
+			"StackName": "aws-email-20190315163601",
+			"StackId": "arn:aws:cloudformation:us-east-1:678103615909:stack/aws-email-20190315163601/f26b9f50-4761-11e9-8971-12d3b8b76b62"
+		},
+		"categories": {
+			"auth": {
+				"cognito59ae2d41": {}
+			}
+		}
+	},
+	"auth": {
+		"cognito59ae2d41": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"AppClientSecret": "1j8v01b1eni11kpvlhhuelbbgadpqml3u3bh8qneum8rrt60mqhg",
+				"UserPoolId": "us-east-1_1MaSYTWaY",
+				"AppClientIDWeb": "6v48i4e271atpquei3i5l5uaft",
+				"AppClientID": "74v1lefcab6rv8cssq2t0511nv",
+				"IdentityPoolId": "us-east-1:59fd1908-6949-41e6-8935-ca15c14d7526",
+				"IdentityPoolName": "cognito59ae2d41_identitypool_59ae2d41__dev",
+				"UserPoolName": "cognito59ae2d41_userpool_59ae2d41"
+			},
+			"lastPushTimeStamp": "2019-04-26T13:54:34.745Z",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/aws-email-20190315163601-deployment/amplify-cfn-templates/auth/cognito59ae2d41-cloudformation-template.yml",
+				"logicalId": "authcognito59ae2d41"
+			},
+			"lastPushDirHash": "MTc64jG78m9cQ4F7tj9E1CUO+xo="
+		}
+	},
+	"hosting": {
+		"S3AndCloudFront": {
+			"service": "S3AndCloudFront",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"CloudFrontSecureURL": "https://d3kz94i3455p0s.cloudfront.net",
+				"S3BucketSecureURL": "https://aws-email-hosting-dev.s3.amazonaws.com",
+				"WebsiteURL": "http://aws-email-hosting-dev.s3-website-us-east-1.amazonaws.com",
+				"CloudFrontDistributionID": "E3V7L8JQOFUGB9",
+				"Region": "us-east-1",
+				"HostingBucketName": "aws-email-hosting-dev",
+				"CloudFrontDomainName": "d3kz94i3455p0s.cloudfront.net"
+			},
+			"lastPushTimeStamp": "2019-04-26T13:54:34.746Z",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/aws-email-20190315163601-deployment/amplify-cfn-templates/hosting/template.json",
+				"logicalId": "hostingS3AndCloudFront"
+			}
+		}
+	},
+	"storage": {
+		"awsemailstorage": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"output": {
+				"BucketName": "awsemailstorage-dev",
+				"Region": "us-east-1"
+			},
+			"lastPushTimeStamp": "2019-04-26T13:54:34.748Z",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/aws-email-20190315163601-deployment/amplify-cfn-templates/storage/initial-create-s3-cloudformation-template.json",
+				"logicalId": "storageawsemailstorage"
+			},
+			"lastPushDirHash": "PklVzsfEzChr2DnmQ2EjR4GAPD4="
+		},
+		"awsemaillist": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"PartitionKeyName": "uid",
+				"SortKeyName": "ts",
+				"SortKeyType": "N",
+				"Region": "us-east-1",
+				"Arn": "arn:aws:dynamodb:us-east-1:678103615909:table/awsemaillist-dev",
+				"PartitionKeyType": "S",
+				"Name": "awsemaillist-dev"
+			},
+			"lastPushTimeStamp": "2019-04-26T13:54:34.749Z",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/aws-email-20190315163601-deployment/amplify-cfn-templates/storage/awsemaillist-cloudformation-template.json",
+				"logicalId": "storageawsemaillist"
+			}
+		}
+	},
+	"function": {
+		"formatemail": {
+			"service": "Lambda",
+			"providerPlugin": "awscloudformation",
+			"build": true,
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "awsemaillist",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			],
+			"lastBuildTimeStamp": "2019-04-26T13:13:14.690Z",
+			"lastPackageTimeStamp": "2019-04-26T13:53:02.483Z",
+			"distZipFilename": "formatemail-1556286776-latest-build.zip",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/aws-email-20190315163601-deployment/amplify-cfn-templates/function/formatemail-cloudformation-template.json",
+				"logicalId": "functionformatemail"
+			},
+			"lastPushTimeStamp": "2019-04-26T13:54:34.750Z",
+			"output": {
+				"Region": "us-east-1",
+				"Arn": "arn:aws:lambda:us-east-1:678103615909:function:formatemail-dev",
+				"Name": "formatemail-dev"
+			},
+			"lastPushDirHash": "vFHSYYefPMFvC76TLU090Y0yJ14="
+		}
+	}
+}

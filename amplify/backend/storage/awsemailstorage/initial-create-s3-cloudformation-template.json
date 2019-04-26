@@ -180,50 +180,8 @@
 		}
 	},
 	"Resources": {
-		"InvokeFormatEmailLambda": {
-			"Type": "AWS::Lambda::Permission",
-			"Properties": {
-				"Action": "lambda:InvokeFunction",
-				"FunctionName": {
-					"Fn::Join": [
-						"",
-						[
-							{
-								"Ref": "functionformatemailName"
-							},
-							"-",
-							{
-								"Ref": "env"
-							}
-						]
-					]
-				},
-				"Principal": "s3.amazonaws.com",
-				"SourceAccount": {
-					"Ref": "AWS::AccountId"
-				},
-				"SourceArn": {
-					"Fn::Join": [
-						"",
-						[
-							"arn:aws:s3:::",
-							{
-								"Ref": "bucketName"
-							},
-							"-",
-							{
-								"Ref": "env"
-							}
-						]
-					]
-				}
-			}
-		},
 		"S3Bucket": {
 			"Type": "AWS::S3::Bucket",
-			"DependsOn": [
-				"InvokeFormatEmailLambda"
-			],
 			"DeletionPolicy": "Retain",
 			"Properties": {
 				"BucketName": {
@@ -272,49 +230,6 @@
 							],
 							"Id": "S3CORSRuleId1",
 							"MaxAge": "3000"
-						}
-					]
-				},
-				"NotificationConfiguration": {
-					"LambdaConfigurations": [
-						{
-							"Function": {
-								"Fn::Join": [
-									"",
-									[
-										"arn:aws:lambda",
-										":",
-										{
-											"Ref": "AWS::Region"
-										},
-										":",
-										{
-											"Ref": "AWS::AccountId"
-										},
-										":",
-										"function",
-										":",
-										{
-											"Ref": "functionformatemailName"
-										},
-										"-",
-										{
-											"Ref": "env"
-										}
-									]
-								]
-							},
-							"Event": "s3:ObjectCreated:*",
-							"Filter": {
-								"S3Key": {
-									"Rules": [
-										{
-											"Name": "prefix",
-											"Value": "raw-email/"
-										}
-									]
-								}
-							}
 						}
 					]
 				}

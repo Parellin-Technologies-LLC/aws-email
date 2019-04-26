@@ -8,17 +8,26 @@ const
 	{ simpleParser } = require( 'mailparser' );
 
 const
-	config = require( '../../../amplify-meta' );
+	config = require( './amplify-meta' );
 
 // TODO:: request help - CloudFormation env for bucket variables
 exports.handler = async ( event, context ) => {
-	console.log( config );
-
 	const
-		UserPoolId = Object.keys( config.auth )
-			.reduce(
-				( r, k ) => ( r = config.auth[ k ].output.UserPoolId, r ), ''
-			);
+		UserPoolIdKey         = Object.keys( config.auth )[ 0 ],
+		UserPoolId            = config.auth[ UserPoolIdKey ].output.UserPoolId,
+		{ Bucket, TableName } = Object.keys( config.storage ).reduce(
+			( r, k ) => {
+				const item = config.storage[ k ];
+
+				if( item.service === 'S3' ) {
+					r.Bucket = item.output.BucketName;
+				} else if( item.service === 'DynamoDB' ) {
+					r.TableName = item.output.Name;
+				}
+
+				return r;
+			}, {}
+		);
 
 	try {
 		const
@@ -37,8 +46,6 @@ exports.handler = async ( event, context ) => {
 				UserPoolId
 			} ).promise();
 
-		console.log( userList.Users[ 0 ] );
-
 		if( !userList.Users.length ) {
 			return context.done( 'User does not exist' );
 		} else if( userList.Users.length > 1 ) {
@@ -49,7 +56,7 @@ exports.handler = async ( event, context ) => {
 		const
 			{ Value: uid } = userList.Users[ 0 ]
 				.Attributes
-				.filter( ( { Name } ) => Name === 'custom:identityId' )[ 0 ],
+				.find( ( { Name } ) => Name === 'custom:identity_id' ),
 			keyId          = s3obj.Key.split( '/' ).pop(),
 			Item           = {
 				uid,
@@ -65,14 +72,14 @@ exports.handler = async ( event, context ) => {
 			};
 
 		await S3.putObject( {
-			Bucket: process.env.EmailStorage,
+			Bucket,
 			ContentType: 'application/json',
 			Key: Item.key,
 			Body: JSON.stringify( eml )
 		} ).promise();
 
 		await DDB.put( {
-			TableName: process.env.EmailDB,
+			TableName,
 			Item
 		} ).promise();
 

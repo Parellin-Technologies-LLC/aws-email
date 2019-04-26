@@ -25,7 +25,11 @@
 	// TODO::: double click issues with draw when on mobile
 	export default {
 		name: 'Sidebar',
-		components: { ProfileSidebar, EmailSidebar, DashboardSidebar },
+		components: {
+			ProfileSidebar,
+			EmailSidebar,
+			DashboardSidebar
+		},
 		computed: {
 			...mapGetters( 'app', [ 'isSidebarOpen' ] )
 		},

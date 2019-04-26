@@ -13,9 +13,11 @@
 	
 	export default {
 		name: 'Email',
-		async mounted() {
-			await this.currentAuthenticatedUser();
-			this.loadEmailConfig();
+		mounted() {
+			Promise.all( [
+				this.currentAuthenticatedUser(),
+				this.loadEmailConfig()
+			] );
 		},
 		methods: {
 			...mapActions( 'auth', [
