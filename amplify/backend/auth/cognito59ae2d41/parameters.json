@@ -34,6 +34,9 @@
 	"smsVerificationMessage": "Your verification code is {####}",
 	"emailVerificationSubject": "Your verification code",
 	"emailVerificationMessage": "Your verification code is {####}",
+	"inviteMessageTemplateEmailSubject": "Your temporary password",
+	"inviteMessageTemplateEmailMessage": "Your username is {username} and temporary password is {####}.",
+	"inviteMessageTemplateSMSMessage": "Your username is {username} and temporary password is {####}.",
 	"defaultPasswordPolicy": false,
 	"passwordPolicyMinLength": 8,
 	"passwordPolicyCharacters": [
