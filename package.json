@@ -13,6 +13,7 @@
 		"@babel/polyfill": "7.4.3",
 		"aws-amplify": "1.1.26",
 		"aws-amplify-vue": "0.2.9",
+		"moment": "2.24.0",
 		"node-sass": "4.11.0",
 		"sass-loader": "7.1.0",
 		"vue": "2.6.10",

@@ -36,12 +36,12 @@
 				"FunctionName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"listemails",
+						"emailcrud",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"listemails",
+									"emailcrud",
 									"-",
 									{
 										"Ref": "env"
@@ -68,7 +68,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "aws-email-20190315163601-deployment",
-					"S3Key": "amplify-builds/listemails-1556292194-latest-build.zip"
+					"S3Key": "amplify-builds/emailcrud-1556309551-latest-build.zip"
 				}
 			}
 		},
@@ -78,12 +78,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"awsemailLambdaRole75b1c59a",
+						"awsemailLambdaRole8701b8eb",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"awsemailLambdaRole75b1c59a",
+									"awsemailLambdaRole8701b8eb",
 									"-",
 									{
 										"Ref": "env"

@@ -21,8 +21,6 @@
 		name: 'App',
 		components: { Sidebar, Toolbar },
 		beforeCreate() {
-			console.log( this );
-			
 			AmplifyEventBus.$on( 'authState',
 				info => {
 					this.authState( info );

@@ -34,7 +34,7 @@
 					<v-list-tile
 						v-for="(folder, i) in config.folder"
 						:key="i"
-						@click="listFolder( folder[ 0 ] )">
+						@click="listFolder( { folder: folder[ 0 ] } )">
 						<v-list-tile-title>{{ folder[ 0 ] }}</v-list-tile-title>
 						<v-list-tile-action>
 							<v-icon>{{ folder[ 1 ] }}</v-icon>

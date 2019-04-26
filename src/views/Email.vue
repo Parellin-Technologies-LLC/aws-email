@@ -1,23 +1,21 @@
 <template>
-	<v-container fluid fill-height>
-		<v-layout justify-center align-center>
-			<v-flex shrink>
-				Email
-			</v-flex>
-		</v-layout>
+	<v-container fluid>
+		<EmailList/>
 	</v-container>
 </template>
 
 <script>
 	import { mapActions } from 'vuex';
+	import EmailList from '@/components/Email/EmailList';
 	
 	export default {
 		name: 'Email',
-		mounted() {
-			Promise.all( [
-				this.currentAuthenticatedUser(),
-				this.loadEmailConfig()
-			] );
+		components: {
+			EmailList
+		},
+		async mounted() {
+			await this.currentAuthenticatedUser();
+			await this.loadEmailConfig();
 		},
 		methods: {
 			...mapActions( 'auth', [

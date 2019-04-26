@@ -14,15 +14,15 @@
         },
     
     
-          "functionlistemailsName": {
+          "functionemailcrudName": {
             "Type": "String",
-            "Default": "functionlistemailsName"
+            "Default": "functionemailcrudName"
           },
         
           
-          "functionlistemailsArn": {
+          "functionemailcrudArn": {
             "Type": "String",
-            "Default": "functionlistemailsArn"
+            "Default": "functionemailcrudArn"
           }
         
           
@@ -90,7 +90,7 @@
                               ]
                             },
                               "/POST",
-                            "/email/list/*"
+                            "/email/*"
                           ]
                         ]
                       },
@@ -121,7 +121,7 @@
                               ]
                             },
                               "/POST",
-                            "/email/list"
+                            "/email"
                           ]
                         ]
                       }
@@ -156,7 +156,7 @@
                               ]
                             },
                               "/GET",
-                            "/email/list/*"
+                            "/email/*"
                           ]
                         ]
                       },
@@ -187,7 +187,7 @@
                               ]
                             },
                               "/GET",
-                            "/email/list"
+                            "/email"
                           ]
                         ]
                       }
@@ -222,7 +222,7 @@
                               ]
                             },
                               "/PUT",
-                            "/email/list/*"
+                            "/email/*"
                           ]
                         ]
                       },
@@ -253,7 +253,7 @@
                               ]
                             },
                               "/PUT",
-                            "/email/list"
+                            "/email"
                           ]
                         ]
                       }
@@ -288,7 +288,7 @@
                               ]
                             },
                               "/PATCH",
-                            "/email/list/*"
+                            "/email/*"
                           ]
                         ]
                       },
@@ -319,7 +319,7 @@
                               ]
                             },
                               "/PATCH",
-                            "/email/list"
+                            "/email"
                           ]
                         ]
                       }
@@ -354,7 +354,7 @@
                               ]
                             },
                               "/DELETE",
-                            "/email/list/*"
+                            "/email/*"
                           ]
                         ]
                       },
@@ -385,7 +385,7 @@
                               ]
                             },
                               "/DELETE",
-                            "/email/list"
+                            "/email"
                           ]
                         ]
                       }
@@ -447,7 +447,7 @@
             ],
             "paths": {
               
-              "/email/list": {
+              "/email": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -539,7 +539,7 @@
                             
                             {
                                 
-                                "Ref": "functionlistemailsArn"
+                                "Ref": "functionemailcrudArn"
                             },
                             
                             "/invocations"
@@ -552,7 +552,7 @@
                   }
                 }
               },
-              "/email/list/{proxy+}": {
+              "/email/{proxy+}": {
                 "options": {
                   "consumes": [
                     "application/json"
@@ -644,7 +644,7 @@
                           
                           {
                             
-                            "Ref": "functionlistemailsArn"
+                            "Ref": "functionemailcrudArn"
                           },
                           
                           "/invocations"
@@ -701,12 +701,12 @@
                   
         
         
-        "functionlistemailsPermissionawsemailapi": {
+        "functionemailcrudPermissionawsemailapi": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
                 "FunctionName": 
                     {
-                        "Ref":  "functionlistemailsName"
+                        "Ref":  "functionemailcrudName"
                     },
                     
                     "Action": "lambda:InvokeFunction",
@@ -736,7 +736,7 @@
         
         
         
-      "DeploymentAPIGWawsemailapi": {
+      "DeploymentAPIGWawsemailapidbfedeb5": {
         "Type": "AWS::ApiGateway::Deployment",
         "Properties": {
           "Description": "The Development stage deployment of your API.",
