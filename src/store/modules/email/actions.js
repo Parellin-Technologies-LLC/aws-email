@@ -18,7 +18,8 @@ export default {
 					[ 'sent', 'mdi-arrow-right' ],
 					[ 'drafts', 'mdi-file-document-edit-outline' ],
 					[ 'spam', 'mdi-alert-circle' ],
-					[ 'trash', 'mdi-trash-can-outline' ]
+					[ 'trash', 'mdi-trash-can-outline' ],
+					[ 'archive', 'mdi-package-down' ]
 				],
 				rules: []
 			};
@@ -124,5 +125,18 @@ export default {
 		console.log( data );
 
 		commit( 'setOpenEmail', email );
+	},
+	async updateEmail( context, body ) {
+		try {
+			const data = await API.put(
+				context.state.apiName,
+				'/email',
+				{ body }
+			);
+
+			console.log( data );
+		} catch( e ) {
+			console.log( e );
+		}
 	}
 };

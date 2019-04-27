@@ -17,7 +17,7 @@
 					dense
 					color="primary">
 					
-					<v-btn icon dark @click="clearEmail( {} )">
+					<v-btn icon dark @click="clearEmail()">
 						<v-icon>mdi-close</v-icon>
 					</v-btn>
 					
@@ -127,9 +127,19 @@
 			] )
 		},
 		methods: {
-			...mapActions( 'email', [ 'clearEmail' ] ),
-			archiveEmail() {
-				console.log( this.openEmail );
+			...mapActions( 'email', [
+				'clearEmail',
+				'updateEmail'
+			] ),
+			async archiveEmail() {
+				await this.updateEmail( {
+					ts: this.openEmail.ts,
+					UpdateExpression: 'set #key = :val',
+					ExpressionAttributeNames: { '#key': 'folder' },
+					ExpressionAttributeValues: { ':val': 'archive' }
+				} );
+				
+				this.clearEmail();
 			}
 		},
 		mounted() {

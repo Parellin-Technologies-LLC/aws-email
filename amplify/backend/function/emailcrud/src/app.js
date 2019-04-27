@@ -203,22 +203,36 @@ app.get( path + '/object' + hashKeyPath + sortKeyPath, function( req, res ) {
  *************************************/
 
 app.put( path, function( req, res ) {
+	console.log( 'app.put' );
 
-	if( userIdPresent ) {
-		req.body[ 'userId' ] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-	}
-
-	const putItemParams = {
+	const updateItemParams = {
 		TableName: tableName,
-		Item: req.body
+		Key: {
+			[ partitionKeyName ]: req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH,
+			[ sortKeyName ]: req.body.ts
+		},
+		UpdateExpression: req.body.UpdateExpression,
+		ConditionExpression: req.body.ConditionExpression,
+		ExpressionAttributeNames: req.body.ExpressionAttributeNames,
+		ExpressionAttributeValues: req.body.ExpressionAttributeValues
 	};
 
-	dynamodb.put( putItemParams, ( err, data ) => {
+	console.log( JSON.stringify( updateItemParams, null, 4 ) );
+
+	dynamodb.update( updateItemParams, ( err, data ) => {
 		if( err ) {
 			res.statusCode = 500;
-			res.json( { error: err, url: req.url, body: req.body } );
+			res.json( {
+				error: err,
+				url: req.url,
+				body: req.body
+			} );
 		} else {
-			res.json( { success: 'put call succeed!', url: req.url, data: data } );
+			res.json( {
+				method: req.method,
+				url: req.url,
+				data
+			} );
 		}
 	} );
 } );
