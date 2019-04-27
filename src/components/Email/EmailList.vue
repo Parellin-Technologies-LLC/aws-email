@@ -17,8 +17,8 @@
 						:indeterminate="props.indeterminate"
 						primary
 						hide-details
-						@click.stop="toggleAll"
-					></v-checkbox>
+						@click.stop="toggleAll">
+					</v-checkbox>
 				</th>
 				
 				<th
@@ -29,7 +29,7 @@
 						pagination.descending ? 'desc' : 'asc',
 						header.value === pagination.sortBy ? 'active' : ''
 					]"
-					@click="changeSort(header.value)">
+					@click="changeSort( header.value )">
 					
 					<v-icon small>arrow_upward</v-icon>
 					{{ header.text }}
@@ -41,10 +41,8 @@
 		
 		<template slot="items" slot-scope="props">
 			<tr :active="props.selected">
-				
 				<td>
 					<v-checkbox
-						v-model="props.selected"
 						:input-value="props.selected"
 						@click="props.selected = !props.selected"
 						primary
@@ -52,19 +50,41 @@
 					</v-checkbox>
 				</td>
 				
-				<td @click="openEmailModal( props )">{{ props.item.from }}</td>
-				<td class="text-xs-right">{{ props.item.subject }}</td>
-				<td class="text-xs-right">{{ props.item.ts }}</td>
+				<td class="text-xs-center"
+					@click="openEmailModal( props )">
+					{{ props.item.fromUser }}
+				</td>
+				<td class="text-xs-center"
+					@click="openEmailModal( props )">
+					{{ props.item.subject }}
+				</td>
+				<td class="text-xs-center"
+					@click="openEmailModal( props )">
+					{{ props.item.timeFrom }}
+				</td>
 			</tr>
 		</template>
-	
 	</v-data-table>
 </template>
 
 <script>
 	import { mapActions, mapMutations, mapGetters } from 'vuex';
 	
+	// TODO::: swap v-data-table to scroll loading
+	// https://stackoverflow.com/questions/52425086/scrollable-data-tables-using-vuetify
+	
 	export default {
+		name: 'EmailList',
+		data() {
+			return {
+				search: '',
+				pagination: {
+					sortBy: 'ts'
+				},
+				selected: [],
+				paginationIndex: {}
+			};
+		},
 		computed: {
 			...mapGetters( 'email', {
 				isLoading: 'getIsLoading',
@@ -75,19 +95,10 @@
 				estimateItemsInFolder: 'getEstimateItemsInFolder'
 			} )
 		},
-		data() {
-			return {
-				search: '',
-				pagination: {
-					descending: true,
-					sortBy: 'ts'
-				},
-				selected: [],
-				paginationIndex: {}
-			};
-		},
 		watch: {
 			pagination: {
+				descending: false,
+				sortBy: 'ts',
 				async handler() {
 					const
 						{
@@ -97,13 +108,17 @@
 					
 					const
 						folder = this.currentFolder,
-						opts   = {
-							Limit
-						};
+						opts   = { Limit };
 					
-					this.paginationIndex[ page ] = { ...this.lastEvaluatedKey };
-					opts.ExclusiveStartKey       = this.paginationIndex[ page ];
-					opts.folder                  = folder;
+					console.log( this.pagination );
+					
+					if( !this.paginationIndex.hasOwnProperty( page ) ) {
+						this.paginationIndex[ page ] = { ...this.lastEvaluatedKey };
+					}
+					
+					opts.ExclusiveStartKey = this.paginationIndex[ page ];
+					opts.folder            = folder;
+					opts.ScanIndexForward  = this.pagination.descending;
 					
 					await this.listFolder( opts );
 				},
@@ -119,6 +134,10 @@
 			...mapMutations( 'email', [ 'setPageLimit' ] ),
 			openEmailModal( email ) {
 				this.loadEmail( email.item );
+			},
+			selectedItem( props ) {
+				props.selected = !props.selected;
+				console.log( arguments );
 			},
 			toggleAll() {
 				if( this.selected.length ) {

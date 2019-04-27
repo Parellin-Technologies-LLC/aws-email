@@ -10,15 +10,17 @@ export default {
 		{
 			text: 'From',
 			value: 'from',
-			align: 'left'
+			sortable: false
 		},
 		{
 			text: 'Subject',
-			value: 'subject'
+			value: 'subject',
+			sortable: false
 		},
 		{
 			text: 'Time',
-			value: 'ts'
+			value: 'ts',
+			sortable: false
 		}
 	],
 	emailData: [],
