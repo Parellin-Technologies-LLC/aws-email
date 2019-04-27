@@ -6,9 +6,6 @@ const
 	bodyParser                     = require( 'body-parser' ),
 	express                        = require( 'express' );
 
-const
-	QueryBuilder = require( './QueryBuilder' );
-
 AWS.config.update( { region: process.env.TABLE_REGION } );
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();

@@ -25,7 +25,7 @@
 			
 			<v-spacer></v-spacer>
 			
-			<v-btn icon>
+			<v-btn icon @click="listFolder">
 				<v-icon>refresh</v-icon>
 			</v-btn>
 		
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-	import { mapMutations, mapGetters } from 'vuex';
+	import { mapActions, mapMutations, mapGetters } from 'vuex';
 	import SignOut from '@/components/Auth/SignOut';
 	
 	export default {
@@ -53,7 +53,8 @@
 			...mapGetters( 'app', [ 'isSidebarOpen' ] )
 		},
 		methods: {
-			...mapMutations( 'app', [ 'toggleSidebar' ] )
+			...mapMutations( 'app', [ 'toggleSidebar' ] ),
+			...mapActions( 'email', [ 'listFolder' ] )
 		}
 	};
 </script>

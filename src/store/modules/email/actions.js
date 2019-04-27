@@ -1,4 +1,6 @@
 import { Storage, API } from 'aws-amplify';
+import axios from 'axios';
+
 import { randomHex } from '@/utils';
 
 export default {
@@ -55,6 +57,7 @@ export default {
 		context.commit( 'setEstimateItemsInFolder', data.Count );
 	},
 	async listFolder( context, opts = {} ) {
+		// TODO: should probable put `opts` in a state parameter
 		try {
 			if( !context.rootState.auth.identityId ) {
 				return;
@@ -83,6 +86,10 @@ export default {
 				opts.Limit = context.state.pageLimit;
 			}
 
+			if( !opts.hasOwnProperty( 'ScanIndexForward' ) ) {
+				opts.ScanIndexForward = false;
+			}
+
 			if( opts.hasOwnProperty( 'ExclusiveStartKey' ) ) {
 				if( Object.keys( opts.ExclusiveStartKey ).length ) {
 					opts.ExclusiveStartKey = JSON.stringify( opts.ExclusiveStartKey );
@@ -104,7 +111,18 @@ export default {
 			console.log( e );
 		}
 	},
+	clearEmail( { commit } ) {
+		commit( 'setOpenEmail', {} );
+	},
 	async loadEmail( { commit }, email ) {
+		const
+			url      = await Storage.vault.get( email.id ),
+			{ data } = await axios.get( url );
+
+		email.data = data;
+
+		console.log( data );
+
 		commit( 'setOpenEmail', email );
 	}
 };

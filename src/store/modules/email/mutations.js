@@ -20,8 +20,6 @@ export default {
 		state.estimateItemsInFolder = estimateItemsInFolder;
 	},
 	setEmailData( state, emailData ) {
-		console.log( emailData );
-
 		const
 			ref   = moment(),
 			today = ref.clone().startOf( 'day' );
@@ -30,14 +28,15 @@ export default {
 			email => {
 				const ts = moment( email.ts );
 
-				email.ts   = ts.isSame( today, 'd' ) ? ts.fromNow() : ts.format( 'L' );
-				email.from = email.from.replace( /(<.*>)/i, '' ).trim();
+				email.timeFrom     = ts.isSame( today, 'd' ) ? ts.fromNow() : ts.format( 'L' );
+				email.readableTime = `${ ts.format( 'ddd MMMM Do, YYYY, h:mm:ss a' ) } (${ ts.fromNow() })`;
+				email.fromUser     = email.from.replace( /(<.*>)/i, '' ).trim();
 
 				return email;
 			}
 		);
 	},
 	setOpenEmail( state, email ) {
-		state.openEmail   = email;
+		state.openEmail = email;
 	}
 };

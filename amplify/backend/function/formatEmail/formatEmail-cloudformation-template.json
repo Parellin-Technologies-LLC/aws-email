@@ -76,7 +76,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "aws-email-20190315163601-deployment",
-					"S3Key": "amplify-builds/formatemail-1556289646-latest-build.zip"
+					"S3Key": "amplify-builds/formatemail-1556387737-latest-build.zip"
 				}
 			}
 		},

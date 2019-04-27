@@ -38,8 +38,8 @@ exports.handler = async ( event, context ) => {
 			raweml       = await S3.getObject( s3obj ).promise(),
 			rawBody      = raweml.Body.toString(),
 			eml          = await simpleParser( rawBody ),
-			emailAddress = eml.to.text;
-
+			emailAddress = s3obj.Key.match( /([\w-]+(@|%40)([\w-]+\.)+[\w-]+)/ )[ 0 ];
+		
 		const
 			userList = await COG.listUsers( {
 				Filter: `email = "${ emailAddress }"`,

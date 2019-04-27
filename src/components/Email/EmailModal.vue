@@ -1,38 +1,62 @@
 <template>
 	<v-layout row justify-center>
 		<v-dialog
-			:value="isEmailOpen"
+			v-model="Object.keys( openEmail ).length"
 			fullscreen
 			hide-overlay
 			transition="dialog-bottom-transition">
 			
-			<v-card>
-				<v-toolbar dark color="primary">
-					<v-btn icon dark @click="isEmailOpen = false">
-						<v-icon>close</v-icon>
+			<v-card
+				v-if="openEmail.hasOwnProperty( 'data' )"
+				class="hide-overflow"
+				style="position: relative;">
+				
+				<v-toolbar
+					dark
+					fixed
+					dense
+					color="primary">
+					
+					<v-btn icon dark @click="clearEmail( {} )">
+						<v-icon>mdi-close</v-icon>
 					</v-btn>
 					
-					<v-toolbar-title>Settings</v-toolbar-title>
-					<v-spacer></v-spacer>
-					<v-toolbar-items>
-						<v-btn dark flat @click="dialog = false">Save</v-btn>
-					</v-toolbar-items>
+					<v-btn icon dark @click="archiveEmail()">
+						<v-icon>mdi-package-down</v-icon>
+					</v-btn>
+					
+					<v-btn icon dark @click="markAsSpam( {} )">
+						<v-icon>mdi-alert-octagon</v-icon>
+					</v-btn>
+					
+					<v-btn icon dark @click="deleteEmail( {} )">
+						<v-icon>mdi-delete</v-icon>
+					</v-btn>
+					
+					<v-btn icon dark @click="markAsUnread( {} )">
+						<v-icon>mdi-email-mark-as-unread</v-icon>
+					</v-btn>
+					
+					<v-btn icon dark @click="moveToFolder( {} )">
+						<v-icon>mdi-folder-move</v-icon>
+					</v-btn>
+					
+					<v-btn icon dark @click="reply( {} )">
+						<v-icon>mdi-reply</v-icon>
+					</v-btn>
 				</v-toolbar>
 				
-				<v-list three-line subheader>
-					<v-subheader>User Controls</v-subheader>
-					<v-list-tile avatar>
+				<v-list three-line class="ml-3 mt-5">
+					<v-list-tile class="mt-1">
 						<v-list-tile-content>
-							<v-list-tile-title>Content filtering</v-list-tile-title>
-							<v-list-tile-sub-title>
-								Set the content filtering level to restrict apps that can be downloaded
+							<v-list-tile-sub-title class="mb-1">
+								From: {{ openEmail.data.from.text }}
 							</v-list-tile-sub-title>
-						</v-list-tile-content>
-					</v-list-tile>
-					<v-list-tile avatar>
-						<v-list-tile-content>
-							<v-list-tile-title>Password</v-list-tile-title>
-							<v-list-tile-sub-title>Require password for purchase or use password to restrict purchase
+							<v-list-tile-sub-title class="mb-1">
+								To: {{ openEmail.data.to.text }}
+							</v-list-tile-sub-title>
+							<v-list-tile-sub-title class="mb-1">
+								Date: {{ openEmail.readableTime }}
 							</v-list-tile-sub-title>
 						</v-list-tile-content>
 					</v-list-tile>
@@ -40,38 +64,45 @@
 				
 				<v-divider></v-divider>
 				
-				<v-list three-line subheader>
-					<v-subheader>General</v-subheader>
-					<v-list-tile avatar>
-						<v-list-tile-action>
-							<v-checkbox v-model="notifications"></v-checkbox>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Notifications</v-list-tile-title>
-							<v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded
-							</v-list-tile-sub-title>
-						</v-list-tile-content>
-					</v-list-tile>
-					<v-list-tile avatar>
-						<v-list-tile-action>
-							<v-checkbox v-model="sound"></v-checkbox>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Sound</v-list-tile-title>
-							<v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply
-							</v-list-tile-sub-title>
-						</v-list-tile-content>
-					</v-list-tile>
-					<v-list-tile avatar>
-						<v-list-tile-action>
-							<v-checkbox v-model="widgets"></v-checkbox>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Auto-add widgets</v-list-tile-title>
-							<v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
-						</v-list-tile-content>
-					</v-list-tile>
-				</v-list>
+				<v-container fluid grid-list-sm tag="section">
+					
+					<v-layout row wrap>
+						<v-flex tag="h1" class="headline">{{ openEmail.subject }}</v-flex>
+						<v-flex d-flex xs12 order-xs5>
+							<v-layout column>
+								<v-flex>
+									<v-card flat>
+										<v-card-text v-html="openEmail.data.html"/>
+									</v-card>
+								</v-flex>
+							</v-layout>
+						</v-flex>
+					</v-layout>
+				
+				</v-container>
+				
+				<v-container fluid class="bottom">
+					<v-layout align-end justify-start row fill-height>
+						<v-card
+							v-for="attachment in openEmail.data.attachments"
+							:key="attachment.checksum">
+							
+							<v-card-title primary-title>
+								<div>
+									<h3 class="headline">{{ attachment.filename }}</h3>
+									<p>Size: {{ attachment.size }}</p>
+									<p>Type: {{ attachment.contentType }}</p>
+								</div>
+							</v-card-title>
+							
+							<v-card-actions>
+								<v-btn flat color="orange">Download</v-btn>
+							</v-card-actions>
+						
+						</v-card>
+					</v-layout>
+				</v-container>
+			
 			</v-card>
 		
 		</v-dialog>
@@ -81,40 +112,24 @@
 	import { mapActions, mapState } from 'vuex';
 	
 	export default {
+		name: 'EmailModal',
 		data() {
 			return {
-				dialog: false,
 				notifications: false,
 				sound: true,
 				widgets: false,
 				localEmail: {}
 			};
 		},
-		methods: {
-			...mapActions( 'email', [ 'loadEmail' ] )
-		},
 		computed: {
 			...mapState( 'email', [
 				'openEmail'
-			] ),
-			isEmailOpen: {
-				set( v ) {
-					if( !v ) {
-						this.loadEmail( {} );
-					} else {
-						this.localEmail = v;
-					}
-				},
-				get() {
-					const localEmailPresent = Object.keys( this.openEmail ).length;
-					
-					if( localEmailPresent ) {
-						this.localEmail = this.openEmail;
-						console.log( 'loadEmail', this.openEmail );
-					}
-					
-					return localEmailPresent;
-				}
+			] )
+		},
+		methods: {
+			...mapActions( 'email', [ 'clearEmail' ] ),
+			archiveEmail() {
+				console.log( this.openEmail );
 			}
 		},
 		mounted() {
@@ -122,3 +137,11 @@
 		}
 	};
 </script>
+
+<style scoped>
+	.bottom {
+		position: absolute;
+		bottom: 0;
+		overflow-x: scroll;
+	}
+</style>
