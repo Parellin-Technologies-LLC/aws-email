@@ -10,90 +10,92 @@
 				class="hide-overflow"
 				style="position: relative;">
 				
-				<v-toolbar
-					dark
-					fixed
-					dense
-					color="primary">
-					
-					<v-btn icon dark @click="showComposeEmail = false">
-						<v-icon>mdi-close</v-icon>
-					</v-btn>
-				</v-toolbar>
-				
-				<v-layout row>
-					<v-container
-						fluid
-						grid-list-sm
-						class="mt-5 ml-3 mr-3">
-						
-						<v-form
-							ref="form"
-							v-model="valid"
-							lazy-validation>
-							
-							<v-text-field
-								v-model="email"
-								:rules="emailRules"
-								label="Send to"
-								required>
-							</v-text-field>
-							
-							<v-text-field
-								v-model="subject"
-								label="Subject">
-							</v-text-field>
-							
-							<v-textarea
-								name="body"
-								label="Body"
-								v-model="body"
-								auto-grow
-								box>
-							</v-textarea>
-							
-							<v-btn
-								color="success"
-								@click="addAttachment">
-								Add Attachment
-							</v-btn>
-							
-							<v-btn
-								:disabled="!valid"
-								color="primary"
-								@click="submitForm">
-								Send
-							</v-btn>
-						
-						</v-form>
-					
-					</v-container>
-				</v-layout>
-				
-				<v-layout row>
-					<v-container
-						class="htmlPreview"
-						fluid>
-						<v-layout align-end justify-end row fill-height>
-							<v-flex xs12>
-								<v-card
-									class="mx-auto"
-									color="light"
-									min-height="100%"
-									max-height="100%">
-									
-									<v-card-title>
-										<span class="title font-weight-light">Preview</span>
-									</v-card-title>
-									
-									<v-card-text v-html="body">
-									</v-card-text>
+				<v-container fluid>
+					<v-layout column>
+						<v-layout row>
+							<v-toolbar
+								dark
+								fixed
+								dense
+								color="primary">
 								
-								</v-card>
-							</v-flex>
+								<v-btn icon dark @click="showComposeEmail = false">
+									<v-icon>mdi-close</v-icon>
+								</v-btn>
+							
+							</v-toolbar>
 						</v-layout>
-					</v-container>
-				</v-layout>
+						
+						<v-layout row>
+							<v-container fluid grid-list-sm>
+								
+								<v-form
+									ref="form"
+									v-model="valid"
+									lazy-validation>
+									
+									<v-text-field
+										v-model="email"
+										:rules="emailRules"
+										label="Send to"
+										required>
+									</v-text-field>
+									
+									<v-text-field
+										v-model="subject"
+										label="Subject">
+									</v-text-field>
+									
+									<v-textarea
+										name="body"
+										label="Body"
+										v-model="body"
+										auto-grow
+										box>
+									</v-textarea>
+									
+									<v-btn
+										color="success"
+										@click="addAttachment">
+										Add Attachment
+									</v-btn>
+									
+									<v-btn
+										:disabled="!valid"
+										color="primary"
+										@click="submitForm">
+										Send
+									</v-btn>
+								
+								</v-form>
+							
+							</v-container>
+							
+							<v-container
+								class="htmlPreview"
+								fluid
+								fill-height>
+								<v-flex xs12>
+									<v-card
+										class="mx-auto"
+										color="light">
+										
+										<v-card-title>
+											<span class="title font-weight-light">Preview</span>
+										</v-card-title>
+										
+										<v-card-text v-html="body"/>
+									
+									</v-card>
+								</v-flex>
+							</v-container>
+						
+						</v-layout>
+						
+						<!--						<v-layout row align-end justify-end fill-height>-->
+						<!--						</v-layout>-->
+					</v-layout>
+				</v-container>
 			
 			</v-card>
 		
@@ -127,12 +129,18 @@
 		methods: {
 			...mapActions( 'email', [
 				'clearEmail',
-				'updateEmail'
+				'updateEmail',
+				'sendEmail'
 			] ),
 			addAttachment() {
 			
 			},
 			submitForm() {
+				this.sendEmail( {
+					to: this.email,
+					subject: this.subject,
+					body: this.body
+				} );
 				console.log( this.email );
 				console.log( this.subject );
 				console.log( this.body );
@@ -142,17 +150,17 @@
 </script>
 
 <style scoped>
-	.htmlPreview {
-		position: absolute;
-		
-		min-width: 40%;
-		max-width: 40%;
-		/*min-height: 40%;*/
-		/*max-height: 40%;*/
-		
-		bottom: 0;
-		right: 0;
-		
-		overflow-x: scroll;
-	}
+	/*.htmlPreview {*/
+	/*	position: absolute;*/
+	/*	*/
+	/*	min-width: 40%;*/
+	/*	max-width: 40%;*/
+	/*	min-height: 40%;*/
+	/*	max-height: 40%;*/
+	/*	*/
+	/*	bottom: 0;*/
+	/*	right: 0;*/
+	/*	*/
+	/*	overflow-x: scroll;*/
+	/*}*/
 </style>

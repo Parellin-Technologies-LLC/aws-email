@@ -144,5 +144,18 @@ export default {
 	setComposeEmail( { commit }, show ) {
 		console.log( show );
 		commit( 'setComposeEmail', show );
+	},
+	async sendEmail( context, body ) {
+		try {
+			const data = await API.post(
+				context.state.apiName,
+				'/email/send',
+				{ body }
+			);
+
+			console.log( data );
+		} catch( e ) {
+			console.log( e );
+		}
 	}
 };

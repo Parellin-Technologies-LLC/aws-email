@@ -8,7 +8,9 @@ const
 
 AWS.config.update( { region: process.env.TABLE_REGION } );
 
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const
+	dynamodb = new AWS.DynamoDB.DocumentClient(),
+	COG      = new AWS.CognitoIdentityServiceProvider( { region: 'us-east-1' } );
 
 let tableName = 'awsemaillist';
 if( process.env.ENV && process.env.ENV !== 'NONE' ) {
@@ -248,24 +250,75 @@ app.put( path, function( req, res ) {
  *************************************/
 
 app.post( path, function( req, res ) {
+	console.log( 'app.post' );
 
-	if( userIdPresent ) {
-		req.body[ 'userId' ] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-	}
-
-	const putItemParams = {
+	const createItemParams = {
 		TableName: tableName,
-		Item: req.body
+		Item: {
+			[ partitionKeyName ]: req.apiGateway.event.requestContext.identity.cognitoIdentityId,
+			[ sortKeyName ]: Date.now(),
+			...res.body
+		}
 	};
 
-	dynamodb.put( putItemParams, ( err, data ) => {
+	console.log( JSON.stringify( createItemParams, null, 4 ) );
+
+	dynamodb.put( createItemParams, ( err, data ) => {
 		if( err ) {
 			res.statusCode = 500;
-			res.json( { error: err, url: req.url, body: req.body } );
+			res.json( {
+				error: err,
+				url: req.url,
+				body: req.body
+			} );
 		} else {
-			res.json( { success: 'post call succeed!', url: req.url, data: data } );
+			res.json( {
+				method: req.method,
+				url: req.url,
+				data
+			} );
 		}
 	} );
+} );
+
+app.post( path + '/send', function( req, res ) {
+
+	console.log( JSON.stringify( req.apiGateway.event, null, 4 ) );
+
+	const createItemParams = {
+		TableName: tableName,
+		Item: {
+			[ partitionKeyName ]: req.apiGateway.event.requestContext.identity.cognitoIdentityId,
+			[ sortKeyName ]: Date.now(),
+			...res.body
+		}
+	};
+
+	console.log( JSON.stringify( createItemParams, null, 4 ) );
+
+	// TODO:: list user `sub = cognitoAuthenticationProvider`
+	// Extract from req.apiGateway.event.requestContext.identity.cognitoAuthenticationProvider
+	res.statusCode = 201;
+	res.json( {
+		url: req.url,
+		body: req.body
+	} );
+	// dynamodb.put( createItemParams, ( err, data ) => {
+	// 	if( err ) {
+	// 		res.statusCode = 500;
+	// 		res.json( {
+	// 			error: err,
+	// 			url: req.url,
+	// 			body: req.body
+	// 		} );
+	// 	} else {
+	// 		res.json( {
+	// 			method: req.method,
+	// 			url: req.url,
+	// 			data
+	// 		} );
+	// 	}
+	// } );
 } );
 
 /**************************************
