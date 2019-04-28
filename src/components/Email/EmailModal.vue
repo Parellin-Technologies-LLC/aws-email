@@ -1,7 +1,7 @@
 <template>
 	<v-layout row justify-center>
 		<v-dialog
-			v-model="Object.keys( openEmail ).length"
+			:value="visible"
 			fullscreen
 			hide-overlay
 			transition="dialog-bottom-transition">
@@ -25,7 +25,7 @@
 						<v-icon>mdi-package-down</v-icon>
 					</v-btn>
 					
-					<v-btn icon dark @click="markAsSpam( {} )">
+					<v-btn icon dark @click="markAsSpam()">
 						<v-icon>mdi-alert-octagon</v-icon>
 					</v-btn>
 					
@@ -85,7 +85,7 @@
 					<v-layout align-end justify-start row fill-height>
 						<v-card
 							v-for="attachment in openEmail.data.attachments"
-							:key="attachment.checksum">
+							:key="attachment.checksum + randomHex()">
 							
 							<v-card-title primary-title>
 								<div>
@@ -110,15 +110,13 @@
 </template>
 <script>
 	import { mapActions, mapState } from 'vuex';
+	import { randomHex } from '@/utils';
 	
 	export default {
 		name: 'EmailModal',
 		data() {
 			return {
-				notifications: false,
-				sound: true,
-				widgets: false,
-				localEmail: {}
+				visible: false
 			};
 		},
 		computed: {
@@ -126,11 +124,32 @@
 				'openEmail'
 			] )
 		},
+		watch: {
+			openEmail( val ) {
+				this.visible = Object.keys( val ).length;
+				
+				if( this.visible ) {
+					this.markOpen();
+				}
+			}
+		},
 		methods: {
 			...mapActions( 'email', [
 				'clearEmail',
 				'updateEmail'
 			] ),
+			randomHex,
+			async markOpen() {
+				if( !this.openEmail.read ) {
+					this.openEmail.read = true;
+					await this.updateEmail( {
+						ts: this.openEmail.ts,
+						UpdateExpression: 'set #key = :val',
+						ExpressionAttributeNames: { '#key': 'read' },
+						ExpressionAttributeValues: { ':val': true }
+					} );
+				}
+			},
 			async archiveEmail() {
 				await this.updateEmail( {
 					ts: this.openEmail.ts,
@@ -140,6 +159,9 @@
 				} );
 				
 				this.clearEmail();
+			},
+			async markAsSpam() {
+			
 			}
 		},
 		mounted() {

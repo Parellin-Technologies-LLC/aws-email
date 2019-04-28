@@ -40,7 +40,8 @@
 		<v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
 		
 		<template slot="items" slot-scope="props">
-			<tr :active="props.selected">
+			<tr :active="props.selected"
+				:style="{ backgroundColor: ( !props.item.read ? 'rgba( 0, 211, 238, 0.25 )' : 'white' ) }">
 				<td>
 					<v-checkbox
 						:input-value="props.selected"
@@ -134,10 +135,6 @@
 			...mapMutations( 'email', [ 'setPageLimit' ] ),
 			openEmailModal( email ) {
 				this.loadEmail( email.item );
-			},
-			selectedItem( props ) {
-				props.selected = !props.selected;
-				console.log( arguments );
 			},
 			toggleAll() {
 				if( this.selected.length ) {

@@ -127,6 +127,12 @@ app.get( path + hashKeyPath, function( req, res ) {
 			val => {
 				val = val.split( '=' );
 
+				if( val[ 1 ] === 'true' || val[ 1 ] === 'false' ) {
+					val[ 1 ] = val[ 1 ] === 'true';
+				} else if( +val[ 1 ] === +val[ 1 ] ) {
+					val[ 1 ] = +val[ 1 ];
+				}
+
 				query.ExpressionAttributeValues[ val[ 0 ] ] = val[ 1 ];
 			}
 		);

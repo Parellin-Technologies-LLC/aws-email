@@ -72,14 +72,23 @@ export default {
 			context.commit( 'setCurrentFolder', opts.folder );
 
 			const
-				id     = randomHex(),
+				id1    = randomHex(),
+				id2    = randomHex(),
 				params = {
 					queryStringParameters: {
-						FilterExpression: `#${ id } = :${ id }`,
-						ExpressionAttributeNames: [ `#${ id }=folder` ],
-						ExpressionAttributeValues: [ `:${ id }=${ opts.folder }` ]
+						FilterExpression: `#${ id1 } = :${ id1 } and #${ id2 } = :${ id2 }`,
+						ExpressionAttributeNames: [
+							`#${ id1 }=folder`,
+							`#${ id2 }=deleted`
+						].join( ',' ),
+						ExpressionAttributeValues: [
+							`:${ id1 }=${ opts.folder }`,
+							`:${ id2 }=false`
+						].join( ',' )
 					}
 				};
+
+			console.log( params );
 
 			delete opts.folder;
 
@@ -138,5 +147,8 @@ export default {
 		} catch( e ) {
 			console.log( e );
 		}
+	},
+	async deleteEmail( context, email ) {
+
 	}
 };
