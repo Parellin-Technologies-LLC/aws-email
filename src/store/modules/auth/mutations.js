@@ -8,5 +8,8 @@ export default {
 	},
 	setUser( state, user ) {
 		state.user = user;
+	},
+	setIdentityId( state, identityId ) {
+		state.identityId = identityId;
 	}
 };

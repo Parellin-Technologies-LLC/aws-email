@@ -21,8 +21,6 @@
 		name: 'App',
 		components: { Sidebar, Toolbar },
 		beforeCreate() {
-			console.log( this );
-			
 			AmplifyEventBus.$on( 'authState',
 				info => {
 					this.authState( info );
@@ -37,11 +35,10 @@
 		},
 		async mounted() {
 			await this.currentSession();
+			await this.currentAuthenticatedUser();
 			
 			if( !this.signedIn ) {
 				this.$router.push( '/auth' );
-			} else {
-				this.$router.push( '/dashboard' );
 			}
 		},
 		computed: {
@@ -51,8 +48,9 @@
 		},
 		methods: {
 			...mapActions( 'auth', [
+				'authState',
 				'currentSession',
-				'authState'
+				'currentAuthenticatedUser'
 			] )
 		}
 	};

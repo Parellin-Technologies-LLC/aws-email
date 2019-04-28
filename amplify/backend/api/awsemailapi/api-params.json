@@ -1,0 +1,42 @@
+{
+    "paths": [
+        {
+            "name": "/email",
+            "lambdaFunction": "emailcrud",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        }
+    ],
+    "resourceName": "awsemailapi",
+    "apiName": "awsemailapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "emailcrud"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "aws-email-20190315163601-authRole",
+        "unAuthRoleName": "aws-email-20190315163601-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "emailcrud",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "dbfedeb5"
+}

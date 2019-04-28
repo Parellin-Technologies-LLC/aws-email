@@ -2,8 +2,11 @@
 	<v-container fluid grid-list-xl>
 		<v-layout align-start justify-center row fill-height>
 			<v-flex xs12 sm8 md6 xl4>
-				<sign-in v-if="viewAuthState.showSignIn"></sign-in>
-				<forgot-password v-if="viewAuthState.showForgotPassword"></forgot-password>
+				<sign-in v-if="viewAuthState.showSignIn"/>
+				<forgot-password v-if="viewAuthState.showForgotPassword"/>
+				<require-new-password
+					v-if="viewAuthState.requireNewPassword"
+					:user="user"/>
 			</v-flex>
 		</v-layout>
 	</v-container>
@@ -15,18 +18,18 @@
 	
 	import SignIn from '@/components/Auth/SignIn';
 	import ForgotPassword from '@/components/Auth/ForgotPassword';
+	import RequireNewPassword from '@/components/Auth/RequireNewPassword';
 	
 	export default {
 		name: 'Auth',
 		components: {
+			RequireNewPassword,
 			ForgotPassword,
 			SignIn
 		},
 		data() {
 			return {
-				user: {
-					username: null
-				},
+				user: {},
 				error: '',
 				logger: {}
 			};
@@ -49,14 +52,7 @@
 		},
 		async mounted() {
 			this.logger = new this.$Amplify.Logger( this.$options.name );
-			
-			AmplifyEventBus.$on( 'localUser', user => {
-				this.user                                  = user;
-				this.options.signInConfig.username         = this.user.username;
-				this.options.confirmSignInConfig.user      = this.user;
-				this.options.confirmSignUpConfig.username  = this.user.username;
-				this.options.requireNewPasswordConfig.user = this.user;
-			} );
+			AmplifyEventBus.$on( 'localUser', user => this.user = user );
 		},
 		methods: {
 			setError( e ) {

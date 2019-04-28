@@ -2,33 +2,27 @@
 	<v-card class="elevation-1">
 		
 		<v-toolbar dark color="success">
-			<v-toolbar-title>Reset your password</v-toolbar-title>
+			<v-toolbar-title>Set your password</v-toolbar-title>
 		</v-toolbar>
 		
 		<v-card-text>
 			<v-form ref="form" lazy-validation>
 				
-				<UsernameField
-					v-model="username"
-					:onKeyupEnter="submit"/>
-				
 				<v-text-field
-					v-if="codeSent"
-					prepend-icon="mdi-counter"
+					prepend-icon="mdi-account"
 					type="text"
-					name="code"
-					label="Code"
-					v-model="code"
-					v-on:keyup.enter="submit"
-					:rules="codeRules"
-					required>
+					name="username"
+					label="Username"
+					color="success"
+					:value="user.username"
+					readonly>
 				</v-text-field>
 				
 				<PasswordField
-					v-if="codeSent"
 					v-model="password"
 					label="New Password"
 					:onKeyupEnter="submit"/>
+			
 			</v-form>
 		</v-card-text>
 		
@@ -36,32 +30,15 @@
 			<v-flex xs12>
 				<v-layout align-end justify-space-between fill-height>
 					<v-btn
-						v-if="!codeSent"
-						@click="backToSignin"
+						@click="returnToLogin"
 						color="primary">
 						Back to Sign In
 					</v-btn>
 					
 					<v-btn
-						v-if="codeSent"
-						@click="submit"
-						color="primary">
-						Resend Code
-					</v-btn>
-					
-					<v-btn
-						v-if="!codeSent"
 						color="primary"
 						@click="submit"
-						:disabled="!username">
-						Send Code
-					</v-btn>
-					
-					<v-btn
-						v-if="codeSent"
-						color="primary"
-						@click="verify"
-						:disabled="!username">
+						:disabled="!password">
 						Submit
 					</v-btn>
 				</v-layout>
@@ -80,24 +57,19 @@
 <script>
 	import { AmplifyEventBus } from 'aws-amplify-vue';
 	import NotificationBar from '@/components/NotificationBar';
-	import UsernameField from '@/components/Auth/UsernameField';
 	import PasswordField from '@/components/Auth/PasswordField';
 	
 	// TODO:: continue cleaning up this component
 	
 	export default {
-		name: 'ForgotPassword',
-		components: { UsernameField, PasswordField, NotificationBar },
+		name: 'RequireNewPassword',
+		components: { PasswordField, NotificationBar },
+		props: {
+			user: Object
+		},
 		data() {
 			return {
-				username: '',
-				code: '',
 				password: '',
-				codeRules: [
-					v => !!v || 'Code is required',
-					v => ( v && /^[0-9]{6,8}$/.test( v ) ) || 'Code must be 6-8 numbers'
-				],
-				codeSent: false,
 				status: {
 					active: false,
 					type: 'success',
@@ -112,32 +84,14 @@
 		},
 		methods: {
 			async submit() {
-				// CodeDeliveryDetails
 				try {
-					const { CodeDeliveryDetails } = await this.$Amplify.Auth.forgotPassword( this.username );
-					
-					this.setStatus(
-						'success',
-						CodeDeliveryDetails.DeliveryMedium === 'SMS' ? 'mdi-cellphone-basic' : 'mdi-email-alert',
-						`${ CodeDeliveryDetails.DeliveryMedium } sent to ${ CodeDeliveryDetails.Destination }`
-					);
-					
-					this.codeSent = true;
-					this.logger.info( 'forgotPassword success' );
-				} catch( e ) {
-					this.setStatus( 'error', 'warning', e );
-				}
-			},
-			async verify() {
-				try {
-					await this.$Amplify.Auth.forgotPasswordSubmit( this.username, this.code, this.password );
-					this.logger.info( 'forgotPasswordSubmit success' );
+					await this.$Amplify.Auth.completeNewPassword( this.user, this.password );
 					AmplifyEventBus.$emit( 'authState', 'signedOut' );
 				} catch( e ) {
 					this.setStatus( 'error', 'warning', e );
 				}
 			},
-			backToSignin() {
+			returnToLogin() {
 				AmplifyEventBus.$emit( 'authState', 'signedOut' );
 			},
 			setStatus( type, icon, msg ) {

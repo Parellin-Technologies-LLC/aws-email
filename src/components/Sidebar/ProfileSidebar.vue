@@ -17,11 +17,16 @@
 				<v-list-tile-title>Settings</v-list-tile-title>
 			</v-list-tile-content>
 		</v-list-tile>
+		
+		<SignOut class="xs-only"/>
 	</div>
 </template>
 
 <script>
+	import SignOut from '@/components/Auth/SignOut';
+	
 	export default {
-		name: 'ProfileSidebar'
+		name: 'ProfileSidebar',
+		components: { SignOut }
 	};
 </script>

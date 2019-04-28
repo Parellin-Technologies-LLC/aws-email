@@ -5,7 +5,7 @@
 			v-if="$route.meta.isDashboard"
 			@click.stop="toggleSidebar"/>
 		
-		<v-toolbar-title class="headline mr-3">
+		<v-toolbar-title class="headline mr-3 hidden-xs-only">
 			<span class="font-weight-light">Email</span>
 		</v-toolbar-title>
 		
@@ -25,19 +25,19 @@
 			
 			<v-spacer></v-spacer>
 			
-			<v-btn icon>
+			<v-btn icon @click="listFolder">
 				<v-icon>refresh</v-icon>
 			</v-btn>
 		
 		</v-layout>
 		
-		<SignOut/>
+		<SignOut class="hidden-xs-only"/>
 	
 	</v-toolbar>
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex';
+	import { mapActions, mapMutations, mapGetters } from 'vuex';
 	import SignOut from '@/components/Auth/SignOut';
 	
 	export default {
@@ -53,7 +53,8 @@
 			...mapGetters( 'app', [ 'isSidebarOpen' ] )
 		},
 		methods: {
-			...mapMutations( 'app', [ 'toggleSidebar' ] )
+			...mapMutations( 'app', [ 'toggleSidebar' ] ),
+			...mapActions( 'email', [ 'listFolder' ] )
 		}
 	};
 </script>
