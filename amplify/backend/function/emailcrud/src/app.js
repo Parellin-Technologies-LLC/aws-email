@@ -281,14 +281,33 @@ app.post( path, function( req, res ) {
 	} );
 } );
 
-app.post( path + '/send', function( req, res ) {
+app.post( path + '/send', async function( req, res ) {
+	const
+		{
+			cognitoIdentityId,
+			cognitoAuthenticationProvider
+		}            = req.apiGateway.event.requestContext.identity,
+		uuidRx       = /([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})/,
+		sub          = cognitoAuthenticationProvider.match( uuidRx )[ 0 ],
+		userPoolIdRx = /(us-east-1_(\S){9})/,
+		UserPoolId   = cognitoAuthenticationProvider.match( userPoolIdRx )[ 0 ];
 
-	console.log( JSON.stringify( req.apiGateway.event, null, 4 ) );
+	// TODO:: up the memory on all functions to 512mb
+	const
+		userList = await COG.listUsers( {
+			Filter: `sub = "${ sub }"`,
+			UserPoolId
+		} ).promise();
+
+	res.body.from = userList[ 0 ]
+		.Attributes
+		.find( i => i.Name === 'email' )
+		.Value;
 
 	const createItemParams = {
 		TableName: tableName,
 		Item: {
-			[ partitionKeyName ]: req.apiGateway.event.requestContext.identity.cognitoIdentityId,
+			[ partitionKeyName ]: cognitoIdentityId,
 			[ sortKeyName ]: Date.now(),
 			...res.body
 		}
@@ -296,13 +315,19 @@ app.post( path + '/send', function( req, res ) {
 
 	console.log( JSON.stringify( createItemParams, null, 4 ) );
 
-	// TODO:: list user `sub = cognitoAuthenticationProvider`
-	// Extract from req.apiGateway.event.requestContext.identity.cognitoAuthenticationProvider
-	res.statusCode = 201;
-	res.json( {
-		url: req.url,
-		body: req.body
-	} );
+	try {
+		res.statusCode = 201;
+		res.json( {
+			url: req.url,
+			body: req.body,
+			sub,
+			Users: userList.Users,
+			UserPoolId
+		} );
+	} catch( e ) {
+		console.error( e );
+	}
+
 	// dynamodb.put( createItemParams, ( err, data ) => {
 	// 	if( err ) {
 	// 		res.statusCode = 500;

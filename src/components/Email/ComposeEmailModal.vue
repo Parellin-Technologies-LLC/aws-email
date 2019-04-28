@@ -12,7 +12,7 @@
 				
 				<v-container fluid>
 					<v-layout column>
-						<v-layout row>
+						<v-layout row mb-4>
 							<v-toolbar
 								dark
 								fixed

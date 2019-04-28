@@ -68,7 +68,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "aws-email-20190315163601-deployment",
-					"S3Key": "amplify-builds/emailcrud-1556467419-latest-build.zip"
+					"S3Key": "amplify-builds/emailcrud-1556480624-latest-build.zip"
 				}
 			}
 		},
@@ -165,6 +165,13 @@
 									"Ref": "storageawsemaillistArn"
 								}
 							]
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"cognito-idp:ListUsers"
+							],
+							"Resource": "*"
 						}
 					]
 				}
