@@ -21,23 +21,23 @@
 						<v-icon>mdi-close</v-icon>
 					</v-btn>
 					
-					<v-btn icon dark @click="archiveEmail()">
+					<v-btn icon dark @click="moveEmailToFolder( 'archive' )">
 						<v-icon>mdi-package-down</v-icon>
 					</v-btn>
 					
-					<v-btn icon dark @click="markAsSpam()">
+					<v-btn icon dark @click="moveEmailToFolder( 'spam' )">
 						<v-icon>mdi-alert-octagon</v-icon>
 					</v-btn>
 					
-					<v-btn icon dark @click="deleteEmail( {} )">
+					<v-btn icon dark @click="moveEmailToFolder( 'trash' )">
 						<v-icon>mdi-delete</v-icon>
 					</v-btn>
 					
-					<v-btn icon dark @click="markAsUnread( {} )">
+					<v-btn icon dark @click="markAsUnread()">
 						<v-icon>mdi-email-mark-as-unread</v-icon>
 					</v-btn>
 					
-					<v-btn icon dark @click="moveToFolder( {} )">
+					<v-btn icon dark @click="folderSelectionOpen = true">
 						<v-icon>mdi-folder-move</v-icon>
 					</v-btn>
 					
@@ -84,8 +84,8 @@
 				<v-container fluid class="bottom">
 					<v-layout align-end justify-start row fill-height>
 						<v-card
-							v-for="attachment in openEmail.data.attachments"
-							:key="attachment.checksum + randomHex()">
+							v-for="( attachment, i ) in openEmail.data.attachments"
+							:key="i">
 							
 							<v-card-title primary-title>
 								<div>
@@ -102,6 +102,24 @@
 						</v-card>
 					</v-layout>
 				</v-container>
+				
+				<v-layout row justify-center>
+					<v-dialog v-model="folderSelectionOpen" scrollable max-width="300px">
+						<v-card>
+							<v-card-title>Move to Folder</v-card-title>
+							<v-divider></v-divider>
+							<v-card-text style="height: 300px;">
+								<v-btn
+									block
+									v-for="( item, index ) in config.folder"
+									:key="index"
+									@click="moveEmailToFolder( item[ 0 ] )">
+									{{ item[ 0 ] }}
+								</v-btn>
+							</v-card-text>
+						</v-card>
+					</v-dialog>
+				</v-layout>
 			
 			</v-card>
 		
@@ -116,11 +134,13 @@
 		name: 'EmailModal',
 		data() {
 			return {
-				visible: false
+				visible: false,
+				folderSelectionOpen: false
 			};
 		},
 		computed: {
 			...mapState( 'email', [
+				'config',
 				'openEmail'
 			] )
 		},
@@ -150,18 +170,30 @@
 					} );
 				}
 			},
-			async archiveEmail() {
+			async markAsUnread() {
+				this.openEmail.read = false;
 				await this.updateEmail( {
 					ts: this.openEmail.ts,
 					UpdateExpression: 'set #key = :val',
-					ExpressionAttributeNames: { '#key': 'folder' },
-					ExpressionAttributeValues: { ':val': 'archive' }
+					ExpressionAttributeNames: { '#key': 'read' },
+					ExpressionAttributeValues: { ':val': false }
 				} );
 				
 				this.clearEmail();
 			},
-			async markAsSpam() {
-			
+			async moveEmailToFolder( folder ) {
+				this.folderSelectionOpen = false;
+				this.openEmail.folder    = folder;
+				
+				// TODO: modal popup for "marked as spam" check if use wants to make rule for it
+				await this.updateEmail( {
+					ts: this.openEmail.ts,
+					UpdateExpression: 'set #key = :val',
+					ExpressionAttributeNames: { '#key': 'folder' },
+					ExpressionAttributeValues: { ':val': folder }
+				} );
+				
+				this.clearEmail();
 			}
 		},
 		mounted() {

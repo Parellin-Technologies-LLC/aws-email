@@ -63,7 +63,6 @@ exports.handler = async ( event, context ) => {
 				ts: +eml.date,
 				id: keyId,
 				read: false,
-				deleted: false,
 				to: eml.to.text,
 				from: eml.from.text,
 				subject: eml.subject,
