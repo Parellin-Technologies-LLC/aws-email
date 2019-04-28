@@ -6,6 +6,7 @@ export default {
 	lastEvaluatedKey: {},
 	estimateItemsInFolder: 0,
 	pageLimit: 0,
+	showComposeEmail: false,
 	emailHeaders: [
 		{
 			text: 'From',

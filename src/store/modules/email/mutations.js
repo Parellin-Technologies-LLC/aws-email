@@ -38,5 +38,8 @@ export default {
 	},
 	setOpenEmail( state, email ) {
 		state.openEmail = email;
+	},
+	setComposeEmail( state, show ) {
+		state.showComposeEmail = show;
 	}
 };

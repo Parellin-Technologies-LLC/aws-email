@@ -140,5 +140,9 @@ export default {
 		} catch( e ) {
 			console.log( e );
 		}
+	},
+	setComposeEmail( { commit }, show ) {
+		console.log( show );
+		commit( 'setComposeEmail', show );
 	}
 };

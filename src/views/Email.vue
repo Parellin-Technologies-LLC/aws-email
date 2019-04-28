@@ -1,20 +1,23 @@
 <template>
 	<v-container fluid>
 		<EmailList/>
-		<EmailModal/>
+		<ViewEmailModal/>
+		<ComposeEmailModal/>
 	</v-container>
 </template>
 
 <script>
 	import { mapActions } from 'vuex';
 	import EmailList from '@/components/Email/EmailList';
-	import EmailModal from '@/components/Email/EmailModal';
+	import ViewEmailModal from '@/components/Email/ViewEmailModal';
+	import ComposeEmailModal from '@/components/Email/ComposeEmailModal';
 	
 	export default {
 		name: 'Email',
 		components: {
 			EmailList,
-			EmailModal
+			ViewEmailModal,
+			ComposeEmailModal
 		},
 		async mounted() {
 			await this.currentAuthenticatedUser();

@@ -131,7 +131,7 @@
 	import { randomHex } from '@/utils';
 	
 	export default {
-		name: 'EmailModal',
+		name: 'ViewEmailModal',
 		data() {
 			return {
 				visible: false,

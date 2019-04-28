@@ -1,11 +1,13 @@
 <template>
 	<div>
 		
-		<v-list-tile @click="createEmail">
+		<v-list-tile @click="setComposeEmail( true )">
 			<v-list-tile-action>
 				<v-icon color="success">mdi-plus-circle</v-icon>
 			</v-list-tile-action>
-			<v-list-tile-title>Create Email</v-list-tile-title>
+			<v-list-tile-title>
+				Create Email
+			</v-list-tile-title>
 		</v-list-tile>
 		
 		<v-list>
@@ -91,10 +93,10 @@
 			} )
 		},
 		methods: {
-			...mapActions( 'email', [ 'listFolder' ] ),
-			createEmail() {
-				console.log( 'here' );
-			}
+			...mapActions( 'email', [
+				'listFolder',
+				'setComposeEmail'
+			] )
 		}
 	};
 </script>
