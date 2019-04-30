@@ -31,7 +31,11 @@
 		
 		</v-layout>
 		
-		<SignOut class="hidden-xs-only"/>
+		<SignOut
+			v-if="signedIn"
+			class="hidden-xs-only"/>
+		
+		<VersionBadge/>
 	
 	</v-toolbar>
 </template>
@@ -39,10 +43,14 @@
 <script>
 	import { mapActions, mapMutations, mapGetters } from 'vuex';
 	import SignOut from '@/components/Auth/SignOut';
+	import VersionBadge from '@/components/VersionBadge';
 	
 	export default {
 		name: 'Toolbar',
-		components: { SignOut },
+		components: {
+			SignOut,
+			VersionBadge
+		},
 		data() {
 			return {
 				drawer: null
