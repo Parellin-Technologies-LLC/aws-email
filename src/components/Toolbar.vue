@@ -23,13 +23,13 @@
 				<v-icon>mdi-account</v-icon>
 			</v-btn>
 			
-			<v-spacer></v-spacer>
-			
 			<v-btn icon @click="listFolder">
 				<v-icon>refresh</v-icon>
 			</v-btn>
 		
 		</v-layout>
+		
+		<v-spacer></v-spacer>
 		
 		<SignOut
 			v-if="signedIn"

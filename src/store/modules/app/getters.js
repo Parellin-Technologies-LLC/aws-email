@@ -1,6 +1,6 @@
 export default {
-	getVersion( state ) {
-		return state.version;
+	getPackage( state ) {
+		return state.npmPackage;
 	},
 	isSidebarOpen( state ) {
 		return state.sidebarOpen;

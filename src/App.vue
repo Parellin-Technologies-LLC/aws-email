@@ -12,8 +12,9 @@
 </template>
 
 <script>
-	import { mapGetters, mapActions } from 'vuex';
+	import { mapActions, mapMutations, mapGetters } from 'vuex';
 	import { AmplifyEventBus } from 'aws-amplify-vue';
+	import npmPackage from '../package';
 	import Toolbar from '@/components/Toolbar';
 	import Sidebar from '@/components/Sidebar';
 	
@@ -34,6 +35,8 @@
 			);
 		},
 		async mounted() {
+			this.setPackage( npmPackage );
+			
 			await this.currentSession();
 			await this.currentAuthenticatedUser();
 			
@@ -51,7 +54,8 @@
 				'authState',
 				'currentSession',
 				'currentAuthenticatedUser'
-			] )
+			] ),
+			...mapMutations( 'app', [ 'setPackage' ] )
 		}
 	};
 </script>
