@@ -1,6 +1,10 @@
 <template>
-	<v-btn class="text-lowercase" flat>
-		v{{ version }}
+	<v-btn
+		v-if="!!npmPackage"
+		class="text-lowercase"
+		:href="npmPackage.repository.url"
+		flat>
+		v{{ npmPackage.version }}
 	</v-btn>
 </template>
 
@@ -11,7 +15,7 @@
 		name: 'VersionBadge',
 		computed: {
 			...mapGetters( 'app', {
-				version: 'getVersion'
+				npmPackage: 'getPackage'
 			} )
 		}
 	};
