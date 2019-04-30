@@ -19,7 +19,9 @@ const
 // aws_content_delivery_url: process.env.content_delivery_url || ''
 // };
 
-writeFileSync(
-	join( process.cwd(), 'src', 'aws-exports.js' ),
-	`export default ${ JSON.stringify( process.env.project_aws_exports ) }`
-);
+const
+	dir    = join( process.cwd(), 'src', 'aws-exports.js' ),
+	config = JSON.parse( process.env.project_aws_exports ),
+	data   = `export default ${ JSON.stringify( config, null, 4 ) }`;
+
+writeFileSync( dir, data );
